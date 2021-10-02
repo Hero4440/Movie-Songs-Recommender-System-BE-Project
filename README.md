@@ -2,8 +2,10 @@
 Movie Songs Recommender System
 <br />
 ---
-###[Google Doc][GoogleDocLink]
-
+###[Google Docs][GoogleDocLink]
+  *To Do
+  *Team Roster
+  *Schedule
 
 
 
