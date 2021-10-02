@@ -3,7 +3,7 @@ Movie Songs Recommender System
 <br />
 ---
 - - - - 
-# [Google Docs][GoogleDocLink] #
+### [Google Docs][GoogleDocLink] ###
  * To Do
  * Team Roster
  * Schedule
