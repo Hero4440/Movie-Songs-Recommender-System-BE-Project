@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import Home from "./components/Home.js";
+import Moviehome from "./components/movies/Moviehome.js";
+import Songhome from "./components/songs/Songs.js"
 import "./App.css";
 const loading = (
   <div class="ui segment">
@@ -26,8 +27,11 @@ function App() {
       <BrowserRouter>
         <React.Suspense fallback={loading}>
           <Switch>
-            <Route exact path="/" element={<Home />}>
-              <Home />
+            <Route exact path="/movies" element={<Moviehome />}>
+              <Moviehome />
+            </Route>
+            <Route exact path="/songs" element={<Songhome />}>
+              <Songhome />
             </Route>
           </Switch>
         </React.Suspense>
