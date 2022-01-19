@@ -6,7 +6,8 @@ function Home() {
 
   return (
     <div>
-      <button type="button" onClick={() => history.push("/movies")}>
+     <h1>Multirater</h1>
+      <button className="mov" type="button" onClick={() => history.push("/movies")}>
         Movies
       </button>
       <button type="button" onClick={() => history.push("/songs")}>
