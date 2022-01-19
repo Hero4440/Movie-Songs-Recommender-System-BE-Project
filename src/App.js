@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from "react";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+import Home from "./components/Home.js";
 import "./App.css";
-
+const loading = (
+  <div class="ui segment">
+    <p></p>
+    <div class="ui active dimmer">
+      <div class="ui loader"></div>
+    </div>
+  </div>
+);
 function App() {
   const [data, setData] = useState([{}]);
 
@@ -12,7 +21,19 @@ function App() {
         console.log(data);
       });
   }, []);
-  return <div className="App">Hello</div>;
+  return (
+    <div className="App">
+      <BrowserRouter>
+        <React.Suspense fallback={loading}>
+          <Switch>
+            <Route exact path="/" element={<Home />}>
+              <Home />
+            </Route>
+          </Switch>
+        </React.Suspense>
+      </BrowserRouter>
+    </div>
+  );
 }
 
 export default App;
