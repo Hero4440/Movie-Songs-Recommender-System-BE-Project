@@ -1,11 +1,15 @@
 from flask import Flask
+import json
+import pandas as pd
 
 app = Flask(__name__)
 
 @app.route('/movies',methods=['GET','POST'])
 def movies():
-    return {'userid':1,
-            'title': 'movies '}
+    print("Loading movies_dict")
+    movies_dict = json.load(open("api_data/movies4.json",'r'))
+
+    return movies_dict
 
 
 @app.route('/books',methods=['GET','POST'])
