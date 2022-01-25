@@ -1,10 +1,11 @@
 .App {
   text-align: center;
+  background-image: url("./images/backg.jpg");
+  background-repeat: no-repeat ;
+  height: 100vh;
+  background-size: cover;
 }
-.mov{
-  
 
-}
 
 h1{
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
@@ -42,4 +43,8 @@ h1{
   to {
     transform: rotate(360deg);
   }
+}
+.Home-Heading{
+  padding-top: 20px;
+  margin-bottom: 20px;
 }
