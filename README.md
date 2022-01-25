@@ -7,14 +7,13 @@ Movie Songs Recommender System
  * To Do
  * Team Roster
  * Schedule
-<br>
----
-- - - -
-### 
-Credits - Tanmay Bhuskute 
-          Amit Jeve
-          Nihal Shah
-          Tejas Shah
+<br />
+
+### Credits ###
+    Tanmay Bhuskute 
+    Amit Jeve
+    Nihal Shah
+    Tejas Shah
 
 
 
