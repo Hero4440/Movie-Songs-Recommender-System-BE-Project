@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { useHistory, BrowserRouter, Route, Switch } from "react-router-dom";
+import React from "react";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Moviehome from "./components/movies/Moviehome.js";
 import Songhome from "./components/songs/Songs.js";
 import Bookshome from "./components/books/Books.js";
 import Home from "./components/home/Home.js";
+
 import "./App.css";
 const loading = (
   <div class="ui segment">
@@ -14,20 +15,10 @@ const loading = (
   </div>
 );
 function App() {
-  let history = useHistory();
-  const handleClick = () => {
-    history.push("./pages/MyComponent");
-  };
-  const [data, setData] = useState([{}]);
-
-  useEffect(() => {
-    fetch("/api")
-      .then((res) => res.json())
-      .then((data) => {
-        setData(data);
-        console.log(data);
-      });
-  }, []);
+  // let history = useHistory();
+  // const handleClick = () => {
+  //   history.push("./pages/MyComponent");
+  // };
   return (
     <div className="App">
       <BrowserRouter>
