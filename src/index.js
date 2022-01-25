@@ -3,7 +3,11 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+<<<<<<< HEAD
 import "@coreui/coreui/dist/css/coreui.min.css";
+=======
+
+>>>>>>> a0ee136e1dfa228ad4709c32d2296673d7638ff8
 ReactDOM.render(
   <React.StrictMode>
     <App />
