@@ -5,7 +5,7 @@ import pandas as pd
 
 
 app = Flask(__name__)
-
+# GET METHODS
 @app.route('/movies',methods=['GET','POST'])
 def movies():
     # For movies Dataframe
@@ -30,6 +30,13 @@ def books():
 def songs():
     return {'userid':3,
             'title': 'songs '}
+    
+    
+# POST METHODS
+@app.route('/recommendmovie',methods=['POST'])
+def recommendmovie():
+    return 'Done',201
+    
 if __name__ == "__main__":
     # movies4 = pd.read_csv('api_data/implementation - presentation - movies4_1496.csv', index_col=0)
     app.run(debug=True) 
