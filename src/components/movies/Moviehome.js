@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { CListGroup, CListGroupItem, CButton } from "@coreui/react";
-
+import { useHistory } from "react-router-dom";
 function Moviehome() {
+  const history = useHistory();
   const [movies, setMovies] = useState([]);
   useEffect(() => {
     fetch("/movies_votes").then((response) =>
@@ -21,6 +22,7 @@ function Moviehome() {
             <CListGroupItem key={movie}>
               <h1>{movie[1]}</h1>
               <h2>Movie Id - {movie[0]}</h2>
+              <h3>Movie rating{movie[13]}</h3>
               <h5>movie description {movie[4]}</h5>
             </CListGroupItem>
           );
@@ -29,6 +31,7 @@ function Moviehome() {
       <CButton
         color="primary"
         onClick={async () => {
+          // change later
           const rated = { hello: 9 };
           const response = await fetch("/recommendmovie", {
             method: "POST",
@@ -43,6 +46,9 @@ function Moviehome() {
         }}
       >
         submit
+      </CButton>
+      <CButton color="primary" onClick={() => history.push("/")}>
+        Back
       </CButton>
     </div>
   );
