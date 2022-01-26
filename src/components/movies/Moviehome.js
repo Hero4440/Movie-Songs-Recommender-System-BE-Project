@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { CListGroup, CListGroupItem, CButton } from "@coreui/react";
+import {
+  CListGroup,
+  CListGroupItem,
+  CButton,
+  CFormRange,
+  CFormLabel,
+} from "@coreui/react";
 import { useHistory } from "react-router-dom";
 function Moviehome() {
   const history = useHistory();
@@ -14,8 +20,6 @@ function Moviehome() {
   console.log(movies);
   return (
     <div>
-      {movies.length}
-
       <CListGroup>
         {movies.map((movie) => {
           return (
@@ -24,6 +28,8 @@ function Moviehome() {
               <h2>Movie Id - {movie[0]}</h2>
               <h3>Movie rating{movie[13]}</h3>
               <h5>movie description {movie[4]}</h5>
+              <CFormLabel htmlFor="customRange2">Rate Movie</CFormLabel>
+              <CFormRange min="0" max="10" defaultValue="5" id="customRange2" />
             </CListGroupItem>
           );
         })}
