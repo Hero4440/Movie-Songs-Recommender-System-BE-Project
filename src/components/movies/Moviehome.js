@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
-import movieimg from '../../images/movie.png'
+import movieimg from "../../images/movie.png";
 import {
   CListGroup,
-  CListGroupItem,
   CButton,
   CFormRange,
   CFormLabel,
   CContainer,
   CRow,
   CCol,
-  CCard, 
+  CCard,
   CCardBody,
   CCardTitle,
   CCardText,
@@ -18,20 +17,15 @@ import {
   CModalHeader,
   CModalTitle,
   CModalBody,
-  
-} 
-from "@coreui/react";
+} from "@coreui/react";
 import { useHistory } from "react-router-dom";
+
 function Moviehome() {
   const history = useHistory();
   const [movies, setMovies] = useState([]);
-  const [visibleXL, setVisibleXL] = useState(false)
-// modal
-const [modalData, setModalData] = useState([]);
-
-
-
-
+  const [visibleXL, setVisibleXL] = useState(false);
+  // modal
+  const [modalData, setModalData] = useState([]);
 
   useEffect(() => {
     fetch("/movies_votes").then((response) =>
@@ -40,55 +34,54 @@ const [modalData, setModalData] = useState([]);
       })
     );
   }, []);
-  console.log(movies);
+  console.log(modalData);
   return (
     <div>
       <CListGroup>
-      <CContainer>
-      <CRow>
-        {movies.map((movie) => {
-          
+        <CContainer>
+          <CRow>
+            {movies.map((movie) => {
+              return (
+                <CCol key={movie}>
+                  <CCard className="movie_card">
+                    <CCardImage orientation="top" src={movieimg} />
+                    <CCardBody>
+                      <CCardTitle>{movie[1]}</CCardTitle>
+                      <CCardText>
+                      <CButton color="primary">
+  Profile <CBadge color="secondary">9</CBadge>
+  <span className="visually-hidden">unread messages</span>
+</CButton>
+                        Movie Id - {movie[0]}Movie rating{movie[13]}
+                      </CCardText>
 
-          return (
-            <CCol key={movie}>
-             
-            <CCard className="movie_card" >
-            <CCardImage orientation="top" src={movieimg} />
-  <CCardBody>
-    <CCardTitle>{movie[1]}</CCardTitle>
-    <CCardText>
-    Movie Id - {movie[0]}Movie rating{movie[13]}
-    </CCardText>
-    
-{/* modal */}
-  <CButton onClick={() => {setVisibleXL(!visibleXL);setModalData(movie);}}> Details</CButton>
-     <CModal size="xl" visible={visibleXL} onClose={() => setVisibleXL(false)}>
-      <CModalHeader>
-        <CModalTitle>hello</CModalTitle>
-      </CModalHeader>
-      <CModalBody>...</CModalBody>
-    </CModal>
-{/* end modal */}
-  <br/>
-    <CFormLabel htmlFor="customRange2">Rate Movie</CFormLabel>
-              <CFormRange min="0" max="10" defaultValue="5" id="customRange2" />
-  </CCardBody>
-              
-                      
-         
-              
-            </CCard>
-             
-            </CCol>
-            
-          );
-        })}
+                      <CButton
+                        onClick={() => {
+                          setVisibleXL(!visibleXL);
+                          setModalData(movie);
+                        }}
+                      >
+                        Details
+                      </CButton>
 
-        </CRow>
-        {/* </CCard> */}
+                      <br />
+                      <CFormLabel htmlFor="customRange2">Rate Movie</CFormLabel>
+                      <CFormRange
+                        min="0"
+                        max="10"
+                        defaultValue="0"
+                        id="customRange2"
+                      />
+                    </CCardBody>
+                  </CCard>
+                </CCol>
+              );
+            })}
+          </CRow>
+          {/* </CCard> */}
         </CContainer>
       </CListGroup>
-      
+
       <CButton
         color="primary"
         onClick={async () => {
@@ -111,6 +104,14 @@ const [modalData, setModalData] = useState([]);
       <CButton color="primary" onClick={() => history.push("/")}>
         Back
       </CButton>
+      {/* modal */}
+      <CModal size="xl" visible={visibleXL} onClose={() => setVisibleXL(false)}>
+        <CModalHeader>
+          <CModalTitle>{modalData[1]}</CModalTitle>
+        </CModalHeader>
+        <CModalBody>{modalData[2]}</CModalBody>
+      </CModal>
+      {/* end modal */}
     </div>
   );
 }
