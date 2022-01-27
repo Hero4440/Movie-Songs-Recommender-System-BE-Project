@@ -39,8 +39,10 @@ function Moviehome() {
   }, []);
   console.log(modalData);
 
-  function handleChange(e) {
+  function handleChange(e, movieId) {
     console.log(e.target.value);
+    console.log(myRef.current);
+    console.log(movieId);
   }
 
   return (
@@ -50,11 +52,12 @@ function Moviehome() {
           <CRow>
             {movies.map((movie) => {
               rateData.push({ movieId: movie[0], Rating: 0 });
-
               myRef.current = rateData;
-              console.log(myRef);
+              // console.log(myRef);
+              const movieId = movie[0];
+              console.log(movieId);
               return (
-                <CCol key={movie}>
+                <CCol key={movieId}>
                   <CCard className="movie_card">
                     <CCardImage orientation="top" src={movieimg} />
                     <CCardBody>
@@ -74,16 +77,13 @@ function Moviehome() {
                       >
                         Details
                       </CButton>
-
                       <br />
                       <CFormLabel htmlFor="customRange2">
                         Rate Movies
                       </CFormLabel>
-
                       <CBadge color="warning"> 0->10 </CBadge>
-
                       <CFormRange
-                        onChange={handleChange}
+                        onChange={(e) => handleChange(e, movieId)}
                         min="0"
                         max="10"
                         defaultValue="0"
