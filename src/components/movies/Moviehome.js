@@ -1,15 +1,38 @@
 import React, { useEffect, useState } from "react";
+import movieimg from '../../images/movie.png'
 import {
   CListGroup,
   CListGroupItem,
   CButton,
   CFormRange,
   CFormLabel,
-} from "@coreui/react";
+  CContainer,
+  CRow,
+  CCol,
+  CCard, 
+  CCardBody,
+  CCardTitle,
+  CCardText,
+  CCardImage,
+  CModal,
+  CModalHeader,
+  CModalTitle,
+  CModalBody,
+  
+} 
+from "@coreui/react";
 import { useHistory } from "react-router-dom";
 function Moviehome() {
   const history = useHistory();
   const [movies, setMovies] = useState([]);
+  const [visibleXL, setVisibleXL] = useState(false)
+// modal
+const [modalData, setModalData] = useState([]);
+
+
+
+
+
   useEffect(() => {
     fetch("/movies_votes").then((response) =>
       response.json().then((data) => {
@@ -21,19 +44,51 @@ function Moviehome() {
   return (
     <div>
       <CListGroup>
+      <CContainer>
+      <CRow>
         {movies.map((movie) => {
+          
+
           return (
-            <CListGroupItem key={movie}>
-              <h1>{movie[1]}</h1>
-              <h2>Movie Id - {movie[0]}</h2>
-              <h3>Movie rating{movie[13]}</h3>
-              <h5>movie description {movie[4]}</h5>
-              <CFormLabel htmlFor="customRange2">Rate Movie</CFormLabel>
+            <CCol key={movie}>
+             
+            <CCard className="movie_card" >
+            <CCardImage orientation="top" src={movieimg} />
+  <CCardBody>
+    <CCardTitle>{movie[1]}</CCardTitle>
+    <CCardText>
+    Movie Id - {movie[0]}Movie rating{movie[13]}
+    </CCardText>
+    
+{/* modal */}
+  <CButton onClick={() => {setVisibleXL(!visibleXL);setModalData(movie);}}> Details</CButton>
+     <CModal size="xl" visible={visibleXL} onClose={() => setVisibleXL(false)}>
+      <CModalHeader>
+        <CModalTitle>hello</CModalTitle>
+      </CModalHeader>
+      <CModalBody>...</CModalBody>
+    </CModal>
+{/* end modal */}
+  <br/>
+    <CFormLabel htmlFor="customRange2">Rate Movie</CFormLabel>
               <CFormRange min="0" max="10" defaultValue="5" id="customRange2" />
-            </CListGroupItem>
+  </CCardBody>
+              
+                      
+         
+              
+            </CCard>
+             
+            </CCol>
+            
           );
         })}
+
+        </CRow>
+        {/* </CCard> */}
+        </CContainer>
       </CListGroup>
+      
       <CButton
         color="primary"
         onClick={async () => {

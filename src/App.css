@@ -9,6 +9,7 @@
 
 h1{
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: medium;
 }
 .App-logo {
   height: 40vmin;
@@ -47,4 +48,14 @@ h1{
 .Home-Heading{
   padding-top: 20px;
   margin-bottom: 20px;
+}
+
+.movie_card{
+  padding: 0 !important;
+  width: 22rem;
+  margin:14px;
+  border-radius: 10px;
+  box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.2), 0 4px 15px 0 rgba(0, 0, 0, 0.19);
+  
+
 }
