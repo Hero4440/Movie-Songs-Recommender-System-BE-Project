@@ -17,6 +17,7 @@ import {
   CModalHeader,
   CModalTitle,
   CModalBody,
+  CBadge,
 } from "@coreui/react";
 import { useHistory } from "react-router-dom";
 
@@ -48,11 +49,10 @@ function Moviehome() {
                     <CCardBody>
                       <CCardTitle>{movie[1]}</CCardTitle>
                       <CCardText>
-                      <CButton color="primary">
-  Profile <CBadge color="secondary">9</CBadge>
-  <span className="visually-hidden">unread messages</span>
-</CButton>
-                        Movie Id - {movie[0]}Movie rating{movie[13]}
+                        <CButton shape="rounded-pill" color="secondary">
+                          Current Rating{" "}
+                          <CBadge color="danger"> {movie[13]}</CBadge>
+                        </CButton>
                       </CCardText>
 
                       <CButton
@@ -65,7 +65,12 @@ function Moviehome() {
                       </CButton>
 
                       <br />
-                      <CFormLabel htmlFor="customRange2">Rate Movie</CFormLabel>
+                      <CFormLabel htmlFor="customRange2">
+                        Rate Movies 👇
+                      </CFormLabel>
+
+                      <CBadge color="warning"> 0->10 </CBadge>
+
                       <CFormRange
                         min="0"
                         max="10"
