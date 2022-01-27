@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import movieimg from "../../images/movie.png";
 import {
   CListGroup,
@@ -27,7 +27,9 @@ function Moviehome() {
   const [visibleXL, setVisibleXL] = useState(false);
   // modal
   const [modalData, setModalData] = useState([]);
-
+  // Use Ref
+  const myRef = useRef([]);
+  const rateData = [];
   useEffect(() => {
     fetch("/movies_votes").then((response) =>
       response.json().then((data) => {
@@ -36,12 +38,21 @@ function Moviehome() {
     );
   }, []);
   console.log(modalData);
+
+  function handleChange(e) {
+    console.log(e.target.value);
+  }
+
   return (
     <div className="movie-home">
       <CListGroup>
         <CContainer>
           <CRow>
             {movies.map((movie) => {
+              rateData.push({ movieId: movie[0], Rating: 0 });
+
+              myRef.current = rateData;
+              console.log(myRef);
               return (
                 <CCol key={movie}>
                   <CCard className="movie_card">
@@ -66,12 +77,13 @@ function Moviehome() {
 
                       <br />
                       <CFormLabel htmlFor="customRange2">
-                        Rate Movies 👇
+                        Rate Movies
                       </CFormLabel>
 
                       <CBadge color="warning"> 0->10 </CBadge>
 
                       <CFormRange
+                        onChange={handleChange}
                         min="0"
                         max="10"
                         defaultValue="0"
