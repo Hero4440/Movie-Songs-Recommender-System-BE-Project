@@ -37,7 +37,7 @@ function Moviehome() {
   }, []);
   console.log(modalData);
   return (
-    <div>
+    <div className="movie-home">
       <CListGroup>
         <CContainer>
           <CRow>
