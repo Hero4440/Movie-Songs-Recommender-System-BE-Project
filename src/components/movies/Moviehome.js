@@ -40,9 +40,17 @@ function Moviehome() {
   console.log(modalData);
 
   function handleChange(e, movieId) {
-    console.log(e.target.value);
-    console.log(myRef.current);
-    console.log(movieId);
+    // console.log(e.target.value);
+    // console.log(myRef.current[0]);
+    // console.log(movieId);
+    // console.log(myRef.current[0]["movieId"]);
+    for (let i = 0, len = myRef.current.length; i < len; i++) {
+      if (movieId === myRef.current[i]["movieId"]) {
+        myRef.current[i]["Rating"] = parseInt(e.target.value);
+        // console.log(myRef.current[i]["Rating"]);
+      }
+    }
+    // console.log(myRef.current);
   }
 
   return (
@@ -55,7 +63,7 @@ function Moviehome() {
               myRef.current = rateData;
               // console.log(myRef);
               const movieId = movie[0];
-              console.log(movieId);
+              // console.log(movieId);
               return (
                 <CCol key={movieId}>
                   <CCard className="movie_card">
@@ -85,7 +93,7 @@ function Moviehome() {
                       <CFormRange
                         onChange={(e) => handleChange(e, movieId)}
                         min="0"
-                        max="10"
+                        max="5"
                         defaultValue="0"
                         id="customRange2"
                       />
@@ -101,9 +109,11 @@ function Moviehome() {
 
       <CButton
         color="primary"
+        type="submit"
         onClick={async () => {
           // change later
-          const rated = { hello: 9 };
+          const rated = myRef.current;
+          console.log(rated);
           const response = await fetch("/recommendmovie", {
             method: "POST",
             headers: {
