@@ -1,25 +1,23 @@
 from flask import Flask,request , jsonify
-import json
 from flask_jsonpify import jsonpify
-import pandas as pd
+import json
+import Movie
 
+
+import Movie
 
 app = Flask(__name__)
 # GET METHODS
 @app.route('/movies',methods=['GET','POST'])
 def movies():
     # For movies Dataframe
-    movies4 = pd.read_csv('api_data/implementation - presentation - movies4_1496.csv', index_col=0)
-    movies4_list = movies4.values.tolist()
-    movies4_JSONP = jsonpify(movies4_list)
-    return movies4_JSONP
+    movies = Movie.readCSVMoviesBackend()
+    return jsonpify(movies.values.tolist())
 
 @app.route('/movies_votes',methods=['GET','POST'])
 def moviesSortByVoteAverage():
-    movies4 = pd.read_csv('api_data/implementation - presentation - movies4_1496.csv', index_col=0)
-    voteAverage_idList = movies4.sort_values(by='vote_average', ascending=False).values.tolist()
-    voteAverage_idList_JSONP = jsonpify(voteAverage_idList)
-    return voteAverage_idList_JSONP
+    movies = Movie.readCSVMoviesBackend()
+    return jsonpify(movies.sort_values(by='vote_average', ascending=False).values.tolist())
 
 @app.route('/books',methods=['GET','POST'])
 def books():
@@ -37,8 +35,19 @@ def songs():
 def recommendmovie():
     Rated_data = request.get_json()
     print(Rated_data)
+
+    movies = Movie.readCSVMoviesBackend()
+    corrMatrix = Movie.readCSVCorr()
+    movies_list = Movie.ratedListExtractor()
+    user_recommendations = 10
+
+    collab = Movie.recommendCollab(movies_list, user_recommendations, corrMatrix)
+    content = Movie.recommendContent(movies_list, user_recommendations, movies)
+
+    collab_list = jsonpify(collab)
+    content_list = jsonpify(content)
+    
     return 'Done',201
     
 if __name__ == "__main__":
-    # movies4 = pd.read_csv('api_data/implementation - presentation - movies4_1496.csv', index_col=0)
     app.run(debug=True) 
