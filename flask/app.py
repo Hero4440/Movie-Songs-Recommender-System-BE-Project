@@ -1,6 +1,7 @@
-from flask import Flask,request , jsonify
+from flask import Flask, make_response,request , jsonify
 from flask_jsonpify import jsonpify
 import json
+import pandas as pd
 import Movie
 
 app = Flask(__name__)
@@ -8,13 +9,14 @@ app = Flask(__name__)
 @app.route('/movies',methods=['GET','POST'])
 def movies():
     # For movies Dataframe
-    movies = Movie.readCSVMoviesBackend()
+    movies = Movie.readCSVMoviesFrontend()
     return jsonpify(movies.values.tolist())
 
 @app.route('/movies_votes',methods=['GET','POST'])
 def moviesSortByVoteAverage():
-    movies = Movie.readCSVMoviesBackend()
-    return jsonpify(movies.sort_values(by='vote_average', ascending=False).values.tolist())
+    movies = Movie.readCSVMoviesFrontend()
+    movies_sort_by_votes = movies.sort_values(by='vote_average', ascending=False)
+    return jsonpify(movies_sort_by_votes.values.tolist())
 
 @app.route('/books',methods=['GET','POST'])
 def books():
@@ -31,20 +33,23 @@ def songs():
 @app.route('/recommendmovie',methods=['POST'])
 def recommendmovie():
     Rated_data = request.get_json()
-    print(Rated_data)
-
+    movies_list = Movie.ratedListExtractor(Rated_data)
+    user_recommendations = 10
+    
     movies = Movie.readCSVMoviesBackend()
     corrMatrix = Movie.readCSVCorr()
-    movies_list = Movie.ratedListExtractor()
-    user_recommendations = 10
-
+    
     collab = Movie.recommendCollab(movies_list, user_recommendations, corrMatrix)
     content = Movie.recommendContent(movies_list, user_recommendations, movies)
 
-    collab_list = jsonpify(collab)
-    content_list = jsonpify(content)
+    # collab_dataframe = jsonpify(Movie.getDataframeFromIDList(collab))
+    # content_dataframe = jsonpify(Movie.getDataframeFromIDList(content))
+
+    print(movies[movies['id'].isin(collab)].sort_values(by='vote_average', ascending=False).values.tolist())
+    print("\n\n\n")
+    print(movies[movies['id'].isin(content)].sort_values(by='vote_average', ascending=False).values.tolist())
     
-    return 'Done',201
+    return make_response('Done',201)
     
 if __name__ == "__main__":
     app.run(debug=True) 
