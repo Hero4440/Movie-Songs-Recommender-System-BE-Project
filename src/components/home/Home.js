@@ -26,8 +26,7 @@ function Home() {
       <CContainer>
         <CRow className="align-items-center">
           <CCol>
-            {" "}
-            <CCard style={{ width: "18rem" }}>
+            <CCard className="home-card" style={{ width: "18rem" }}>
               <CCardImage orientation="top" src={movieimg} />
               <CCardBody>
                 <CCardTitle>Movies Recommender</CCardTitle>
@@ -51,8 +50,7 @@ function Home() {
             </CCard>
           </CCol>
           <CCol>
-            {" "}
-            <CCard style={{ width: "18rem" }}>
+            <CCard className="home-card" style={{ width: "18rem" }}>
               <CCardImage orientation="top" src={songimg} />
               <CCardBody>
                 <CCardTitle>Song Recommender</CCardTitle>
@@ -76,8 +74,7 @@ function Home() {
             </CCard>
           </CCol>
           <CCol>
-            {" "}
-            <CCard style={{ width: "18rem" }}>
+            <CCard className="home-card" style={{ width: "18rem" }}>
               <CCardImage orientation="top" src={bookimg} />
               <CCardBody>
                 <CCardTitle>Book Recommender</CCardTitle>
@@ -101,31 +98,8 @@ function Home() {
             </CCard>
           </CCol>
         </CRow>
-        {/* <CRow className="align-items-end">
-    <CCol>One of three columns</CCol>
-    <CCol>One of three columns</CCol>
-    <CCol>One of three columns</CCol>
-  </CRow> */}
       </CContainer>
-
-      {/* <button
-        className="mov"
-        type="button"
-        onClick={() => history.push("/movies")}
-      >
-        Movies
-      </button> */}
     </div>
-
-
-
-
-
-
-
-
-
-
   );
 }
 

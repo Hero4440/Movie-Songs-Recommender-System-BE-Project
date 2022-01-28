@@ -2,13 +2,6 @@
   text-align: center;
 }
 
-.home {
-  background-image: url("./images/backg.jpg");
-  background-repeat: repeat;
-  height: 100vh;
-  background-size: cover;
-}
-
 h1 {
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   font-size: medium;
@@ -46,6 +39,16 @@ h1 {
   to {
     transform: rotate(360deg);
   }
+}
+
+.home {
+  background-image: url("./images/backg.jpg");
+  background-repeat: repeat;
+  height: 150vh;
+  background-size: cover;
+}
+.home-card {
+  margin: 10px;
 }
 .home-heading {
   padding-top: 20px;
