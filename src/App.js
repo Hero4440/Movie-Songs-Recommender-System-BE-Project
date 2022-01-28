@@ -4,7 +4,7 @@ import Moviehome from "./components/movies/Moviehome.js";
 import Songhome from "./components/songs/Songs.js";
 import Bookshome from "./components/books/Books.js";
 import Home from "./components/home/Home.js";
-
+import Finalmovie from "./components/movies/Finalmovie.js";
 import "./App.css";
 const loading = (
   <div class="ui segment">
@@ -29,6 +29,9 @@ function App() {
             </Route>
             <Route exact path="/movies" element={<Moviehome />}>
               <Moviehome />
+            </Route>
+            <Route exact path="/recommend_movie" element={<Finalmovie />}>
+              <Finalmovie />
             </Route>
             <Route exact path="/songs" element={<Songhome />}>
               <Songhome />

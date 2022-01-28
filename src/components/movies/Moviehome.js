@@ -89,7 +89,7 @@ function Moviehome() {
                       <CFormLabel htmlFor="customRange2">
                         Rate Movies
                       </CFormLabel>
-                      <CBadge color="warning"> 0->10 </CBadge>
+                      <CBadge color="warning"> 0-5 </CBadge>
                       <CFormRange
                         onChange={(e) => handleChange(e, movieId)}
                         min="0"
@@ -122,6 +122,9 @@ function Moviehome() {
           });
           if (response.ok) {
             console.log("response worked");
+            history.push("/recommend_movie");
+          } else {
+            console.log("error");
           }
         }}
       >
