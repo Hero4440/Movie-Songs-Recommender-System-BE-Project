@@ -3,9 +3,6 @@ from flask_jsonpify import jsonpify
 import json
 import Movie
 
-
-import Movie
-
 app = Flask(__name__)
 # GET METHODS
 @app.route('/movies',methods=['GET','POST'])
