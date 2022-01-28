@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask,request , jsonify
 import json
 from flask_jsonpify import jsonpify
 import pandas as pd
@@ -35,6 +35,8 @@ def songs():
 # POST METHODS
 @app.route('/recommendmovie',methods=['POST'])
 def recommendmovie():
+    Rated_data = request.get_json()
+    print(Rated_data)
     return 'Done',201
     
 if __name__ == "__main__":

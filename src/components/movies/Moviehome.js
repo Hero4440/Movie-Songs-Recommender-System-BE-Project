@@ -109,7 +109,6 @@ function Moviehome() {
 
       <CButton
         color="primary"
-        type="submit"
         onClick={async () => {
           // change later
           const rated = myRef.current;
