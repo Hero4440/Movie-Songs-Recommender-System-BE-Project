@@ -1,10 +1,15 @@
+import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sb
+import ast
 import random
+from scipy import sparse
 
 # ------------------------------------------------------------------------------------------------
 # -----------------------------------##Read CSV##-------------------------------------------------
 # ------------------------------------------------------------------------------------------------
-def readCSVMoviesFrontend():
+def readCSVMoviesFrontEnd():
     movies_frontend = pd.read_csv('api_data/implementation - presentation - movies4_1496.csv', index_col=0)
     return movies_frontend
 
@@ -30,9 +35,6 @@ def ratedListExtractor(rated_dict):
             rated_list.append(dict_value)
     return rated_list
 
-def getDataframeFromIDList(id_list, movies):
-    return movies[movies['id'].isin(id_list)].sort_values(by='vote_average', ascending=False).values.tolist()
-
 '''
 -*-*-*-*-*-*-*-*-*-*-*-*-
         //COLLAB//
@@ -57,7 +59,7 @@ def recommendCollab(movies_list, user_recommendations, corrMatrix):
     # returns id list of collaborative recommendations
     return recommend_id_collab
 # ------------------------------------------------------------------------------------------------
-# ------------------------------------##CONTENT##-------------------------------------------------
+# ------------------------------------##CONTENT##--------------------------------------------------
 # ------------------------------------------------------------------------------------------------
 
 # Cosine Similarity
