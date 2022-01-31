@@ -72,7 +72,7 @@ function Finalmovie() {
                       </CButton>
                       <br />
                       <CFormLabel htmlFor="customRange2">
-                        Recommended Movies
+                        Recommended Movie
                       </CFormLabel>
                     </CCardBody>
                   </CCard>
