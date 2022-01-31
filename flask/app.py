@@ -51,7 +51,7 @@ def recommendmovie():
 @app.route('/movie_result',methods=['GET'])
 def moviesresult():
 #    get final data
-    print(movies_recommend_final)
+    # print(movies_recommend_final)
     return jsonpify(movies_recommend_final)
 
 @app.route('/books',methods=['GET','POST'])

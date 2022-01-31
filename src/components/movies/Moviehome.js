@@ -71,7 +71,7 @@ function Moviehome() {
                     <CCardBody>
                       <CCardTitle>{movie[1]}</CCardTitle>
                       <CCardText>
-                        <CButton shape="rounded-pill" color="secondary">
+                        <CButton className="rate_current" shape="rounded-pill" color="secondary">
                           Current Rating{" "}
                           <CBadge color="danger"> {movie[13]}</CBadge>
                         </CButton>
