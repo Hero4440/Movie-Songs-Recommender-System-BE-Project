@@ -64,3 +64,15 @@ h1 {
 }
 
 /* movie background css */
+.movie-cover-img {
+  background-size: cover;
+  width: 33%;
+  height: 450px;
+}
+/* .float-buttons {
+  position: fixed;
+  bottom: 50px;
+  right: 50px;
+  z-index: 999;
+  cursor: pointer;
+} */

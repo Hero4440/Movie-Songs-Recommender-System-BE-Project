@@ -20,7 +20,6 @@ import {
   CBadge,
 } from "@coreui/react";
 import { useHistory } from "react-router-dom";
-
 function Moviehome() {
   const history = useHistory();
   const [movies, setMovies] = useState([]);
@@ -67,29 +66,48 @@ function Moviehome() {
               return (
                 <CCol key={movieId}>
                   <CCard className="movie_card">
-                    <CCardImage orientation="top" src={movieimg} />
+                    <CCardImage
+                      onClick={() => {
+                        setVisibleXL(!visibleXL);
+                        setModalData(movie);
+                      }}
+                      className="movie-cover-img"
+                      orientation="top"
+                      src={movie[15]}
+                    />
                     <CCardBody>
-                      <CCardTitle>{movie[1]}</CCardTitle>
-                      <CCardText>
-                        <CButton className="rate_current" shape="rounded-pill" color="secondary">
-                          Current Rating{" "}
-                          <CBadge color="danger"> {movie[13]}</CBadge>
-                        </CButton>
-                      </CCardText>
-
-                      <CButton
+                      <CCardTitle
                         onClick={() => {
                           setVisibleXL(!visibleXL);
                           setModalData(movie);
                         }}
                       >
+                        {movie[1]}
+                      </CCardTitle>
+                      <CCardText>
+                        <CButton
+                          onClick={() => {
+                            setVisibleXL(!visibleXL);
+                            setModalData(movie);
+                          }}
+                          className="rate_current"
+                          color="secondary"
+                        >
+                          Current Rating{" "}
+                          <CBadge color="danger"> {movie[13]}</CBadge>
+                        </CButton>
+                      </CCardText>
+
+                      {/* <CButton
+                        onClick={() => {
+                          setVisibleXL(!visibleXL);
+                          setModalData(movie);
+                        }}
+                        >
                         Details
-                      </CButton>
-                      <br />
-                      <CFormLabel htmlFor="customRange2">
-                        Rate Movies
-                      </CFormLabel>
-                      <CBadge color="warning"> 0-5 </CBadge>
+                      </CButton> */}
+
+                      <CBadge color="info"> 0 to 5 </CBadge>
                       <CFormRange
                         onChange={(e) => handleChange(e, movieId)}
                         min="0"
@@ -106,33 +124,34 @@ function Moviehome() {
           {/* </CCard> */}
         </CContainer>
       </CListGroup>
-
-      <CButton
-        color="primary"
-        onClick={async () => {
-          // change later
-          const rated = myRef.current;
-          console.log(rated);
-          const response = await fetch("/recommendmovie", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(rated),
-          });
-          if (response.ok) {
-            console.log("response worked");
-            history.push("/recommend_movie");
-          } else {
-            console.log("error");
-          }
-        }}
-      >
-        submit
-      </CButton>
-      <CButton color="primary" onClick={() => history.push("/")}>
-        Back
-      </CButton>
+      <div className="float-button">
+        <CButton
+          color="primary"
+          onClick={async () => {
+            // change later
+            const rated = myRef.current;
+            console.log(rated);
+            const response = await fetch("/recommendmovie", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(rated),
+            });
+            if (response.ok) {
+              console.log("response worked");
+              history.push("/recommend_movie");
+            } else {
+              console.log("error");
+            }
+          }}
+        >
+          submit
+        </CButton>
+        <CButton color="primary" onClick={() => history.push("/")}>
+          Back
+        </CButton>
+      </div>
       {/* modal */}
       <CModal size="xl" visible={visibleXL} onClose={() => setVisibleXL(false)}>
         <CModalHeader>
