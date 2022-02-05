@@ -57,8 +57,9 @@ h1 {
 
 .movie_card {
   padding: 0 !important;
-  width: 22rem;
-  margin: 14px;
+  width: 18rem;
+  height: 30rem;
+  margin: 10px 5px 50px 5px;
   border-radius: 10px;
   box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.2), 0 4px 15px 0 rgba(0, 0, 0, 0.19);
 }
@@ -66,8 +67,7 @@ h1 {
 /* movie background css */
 .movie-cover-img {
   background-size: cover;
-  width: 33%;
-  height: 450px;
+  height: 300px;
 }
 /* .float-buttons {
   position: fixed;

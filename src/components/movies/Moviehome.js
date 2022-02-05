@@ -32,7 +32,7 @@ function Moviehome() {
   useEffect(() => {
     fetch("/movies_votes").then((response) =>
       response.json().then((data) => {
-        setMovies(data.slice(0, 10));
+        setMovies(data.slice(0, 12));
       })
     );
   }, []);

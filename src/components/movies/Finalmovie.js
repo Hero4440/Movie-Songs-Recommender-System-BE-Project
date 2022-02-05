@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import movieimg from "../../images/movie.png";
+
 import {
   CListGroup,
   CButton,
@@ -53,7 +53,11 @@ function Finalmovie() {
               return (
                 <CCol key={movieId}>
                   <CCard className="movie_card">
-                    <CCardImage orientation="top" src={movieimg} />
+                    <CCardImage
+                      orientation="top"
+                      className="movie-cover-img"
+                      src={movie[15]}
+                    />
                     <CCardBody>
                       <CCardTitle>{movie[1]}</CCardTitle>
                       <CCardText>
@@ -61,7 +65,6 @@ function Finalmovie() {
                           Rating <CBadge color="danger"> {movie[13]}</CBadge>
                         </CButton>
                       </CCardText>
-
                       <CButton
                         onClick={() => {
                           setVisibleXL(!visibleXL);
@@ -71,9 +74,6 @@ function Finalmovie() {
                         Details
                       </CButton>
                       <br />
-                      <CFormLabel htmlFor="customRange2">
-                        Recommended Movie
-                      </CFormLabel>
                     </CCardBody>
                   </CCard>
                 </CCol>
