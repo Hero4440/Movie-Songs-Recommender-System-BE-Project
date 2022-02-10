@@ -18,6 +18,8 @@ import {
   CModalTitle,
   CModalBody,
   CBadge,
+  CAlert,
+  CCallout,
 } from "@coreui/react";
 import { useHistory } from "react-router-dom";
 function Moviehome() {
@@ -76,7 +78,7 @@ function Moviehome() {
                       src={movie[15]}
                     />
                     <CCardBody>
-                      <CCardTitle
+                      <CCardTitle className="card-title"
                         onClick={() => {
                           setVisibleXL(!visibleXL);
                           setModalData(movie);
@@ -157,8 +159,16 @@ function Moviehome() {
         <CModalHeader>
           <CModalTitle>{modalData[1]}</CModalTitle>
         </CModalHeader>
-        <CModalBody>{modalData[2]}</CModalBody>
+        <CModalBody> <CBadge color="primary">{modalData[2]}</CBadge>
+        <CAlert color="primary">
+         {modalData[3]} 
+</CAlert>
+<CCallout color="dark">
+  Synopsis:  {modalData[4]} 
+</CCallout>
+        </CModalBody>
       </CModal>
+      
       {/* end modal */}
     </div>
   );
