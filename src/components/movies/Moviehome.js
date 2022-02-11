@@ -10,6 +10,7 @@ import {
   CCard,
   CCardBody,
   CCardTitle,
+  CToaster,
   CCardText,
   CCardImage,
   CModal,
@@ -19,6 +20,9 @@ import {
   CBadge,
   CAlert,
   CCallout,
+  CToast,
+  CToastHeader,
+  CToastBody,
 } from "@coreui/react";
 import { useHistory } from "react-router-dom";
 function Moviehome() {
@@ -66,6 +70,30 @@ function Moviehome() {
   // function genre(data) {
   //   return data;
   // }
+
+  // toast
+  const [toast, addToast] = useState(0);
+  const toaster = useRef();
+  const exampleToast = (
+    <CToast title="Warning">
+      <CToastHeader close>
+        <svg
+          className="rounded me-2"
+          width="20"
+          height="20"
+          xmlns="http://www.w3.org/2000/svg"
+          preserveAspectRatio="xMidYMid slice"
+          focusable="false"
+          role="img"
+        >
+          <rect width="100%" height="100%" fill="#F76E11"></rect>
+        </svg>
+        <strong className="me-auto">WARNING</strong>
+        <small>exception Occured</small>
+      </CToastHeader>
+      <CToastBody>Please Atleast Rate One Movie!!!</CToastBody>
+    </CToast>
+  );
   return (
     <div className="movie-home">
       <CListGroup>
@@ -127,20 +155,32 @@ function Moviehome() {
           color="primary"
           onClick={async () => {
             // change later
+            let flag = 0;
             const rated = myRef.current;
             console.log(rated);
-            const response = await fetch("/recommendmovie", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(rated),
-            });
-            if (response.ok) {
-              console.log("response worked");
-              history.push("/recommend_movie");
+            for (let i = 0; i < rated.length; i++) {
+              console.log(rated[i].Rating);
+              if (rated[i].Rating !== 0) {
+                flag = 1;
+              }
+            }
+            if (flag === 1) {
+              const response = await fetch("/recommendmovie", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(rated),
+              });
+              if (response.ok) {
+                console.log("response worked");
+                history.push("/recommend_movie");
+              } else {
+                console.log("error");
+              }
             } else {
-              console.log("error");
+              addToast(exampleToast);
+              console.log("errrrr");
             }
           }}
         >
@@ -177,7 +217,7 @@ function Moviehome() {
           <br />
         </CModalBody>
       </CModal>
-
+      <CToaster ref={toaster} push={toast} placement="top-end" />
       {/* end modal */}
     </div>
   );
