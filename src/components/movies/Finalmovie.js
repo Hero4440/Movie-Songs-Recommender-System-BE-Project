@@ -3,20 +3,20 @@ import React, { useEffect, useState, useRef } from "react";
 import {
   CListGroup,
   CButton,
-  CFormLabel,
   CContainer,
   CRow,
   CCol,
   CCard,
   CCardBody,
   CCardTitle,
-  CCardText,
   CCardImage,
   CModal,
   CModalHeader,
   CModalTitle,
   CModalBody,
   CBadge,
+  CAlert,
+  CCallout,
 } from "@coreui/react";
 import { useHistory } from "react-router-dom";
 
@@ -32,8 +32,20 @@ function Finalmovie() {
   useEffect(() => {
     fetch("/movie_result").then((response) =>
       response.json().then((data) => {
-        setMovies(data.slice(0, 10));
-        console.log(data);
+        const newData = data.slice(0, 12);
+        for (let i = 0, len = newData.length; i < len; i++) {
+          // regex
+          newData[i][2] = newData[i][2].replace(/['"]+/g, "");
+          newData[i][2] = newData[i][2].slice(1, -1);
+          newData[i][6] = newData[i][6].replace(/['"]+/g, "");
+          newData[i][6] = newData[i][6].slice(1, -1);
+          newData[i][4] = newData[i][4].replace(/['"]+/g, "");
+          newData[i][4] = newData[i][4].slice(1, -1);
+          newData[i][5] = newData[i][5].replace(/['"]+/g, "");
+          newData[i][5] = newData[i][5].slice(1, -1);
+        }
+        console.log(newData);
+        setMovies(newData);
       })
     );
   }, []);
@@ -47,33 +59,35 @@ function Finalmovie() {
             {movies.map((movie) => {
               rateData.push({ movieId: movie[0], Rating: 0 });
               myRef.current = rateData;
-              // console.log(myRef);
               const movieId = movie[0];
               // console.log(movieId);
               return (
                 <CCol key={movieId}>
-                  <CCard className="movie_card">
+                  <CCard className="final_card">
                     <CCardImage
-                      orientation="top"
                       className="movie-cover-img"
+                      orientation="top"
                       src={movie[15]}
                     />
-                    <CCardBody>
-                      <CCardTitle>{movie[1]}</CCardTitle>
-                      <CCardText>
-                        <CButton shape="rounded-pill" color="secondary">
-                          Rating <CBadge color="danger"> {movie[13]}</CBadge>
+
+                    <CCardBody className="card-body">
+                      <CCardTitle className="card-title">{movie[1]}</CCardTitle>
+                      <div className="button-card-div">
+                        <div className="rate_current">
+                          Current Rating{" "}
+                          <CBadge color="danger"> {movie[13]}</CBadge>
+                        </div>
+
+                        <CButton
+                          variant="outline"
+                          onClick={() => {
+                            setVisibleXL(!visibleXL);
+                            setModalData(movie);
+                          }}
+                        >
+                          Details
                         </CButton>
-                      </CCardText>
-                      <CButton
-                        onClick={() => {
-                          setVisibleXL(!visibleXL);
-                          setModalData(movie);
-                        }}
-                      >
-                        Details
-                      </CButton>
-                      <br />
+                      </div>
                     </CCardBody>
                   </CCard>
                 </CCol>
@@ -83,17 +97,62 @@ function Finalmovie() {
           {/* </CCard> */}
         </CContainer>
       </CListGroup>
-
-      <CButton color="primary" onClick={() => history.push("/")}>
-        Back to Home Page
-      </CButton>
+      <div className="float-button">
+        <CButton
+          color="primary"
+          onClick={async () => {
+            // change later
+            const rated = myRef.current;
+            console.log(rated);
+            const response = await fetch("/recommendmovie", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(rated),
+            });
+            if (response.ok) {
+              console.log("response worked");
+              history.push("/recommend_movie");
+            } else {
+              console.log("error");
+            }
+          }}
+        >
+          submit
+        </CButton>
+        <CButton color="primary" onClick={() => history.push("/")}>
+          Back
+        </CButton>
+      </div>
       {/* modal */}
       <CModal size="xl" visible={visibleXL} onClose={() => setVisibleXL(false)}>
         <CModalHeader>
           <CModalTitle>{modalData[1]}</CModalTitle>
         </CModalHeader>
-        <CModalBody>{modalData[2]}</CModalBody>
+        <CModalBody>
+          <div className="modal-flex">
+            <div className="modal-flex-left">
+              <img src={modalData[15]} className="modal-img" alt="" />
+            </div>
+            <div className="modal-flex-right">
+              <CBadge color="primary">{modalData[2]}</CBadge>
+              <span> </span>
+              <CBadge color="danger">{modalData[7]}</CBadge>
+              <CAlert color="primary">
+                <h5>Cast</h5> {modalData[6]}
+              </CAlert>
+              <CAlert color="info">
+                <strong>Director: </strong>
+                {modalData[5]}
+              </CAlert>
+              <CCallout color="dark">{modalData[4]}</CCallout>
+            </div>
+          </div>
+          <br />
+        </CModalBody>
       </CModal>
+
       {/* end modal */}
     </div>
   );
