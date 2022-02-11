@@ -4,7 +4,6 @@ import {
   CListGroup,
   CButton,
   CFormRange,
-  CFormLabel,
   CContainer,
   CRow,
   CCol,
@@ -34,7 +33,18 @@ function Moviehome() {
   useEffect(() => {
     fetch("/movies_votes").then((response) =>
       response.json().then((data) => {
-        setMovies(data.slice(0, 12));
+        const newData = data.slice(0, 12);
+        for (let i = 0, len = newData.length; i < len; i++) {
+          // regex
+          newData[i][2] = newData[i][2].replace(/['"]+/g, "");
+          newData[i][2] = newData[i][2].slice(1, -1);
+          newData[i][6] = newData[i][6].replace(/['"]+/g, "");
+          newData[i][6] = newData[i][6].slice(1, -1);
+          newData[i][5] = newData[i][5].replace(/['"]+/g, "");
+          newData[i][5] = newData[i][5].slice(1, -1);
+        }
+        console.log(newData);
+        setMovies(newData);
       })
     );
   }, []);
@@ -53,7 +63,9 @@ function Moviehome() {
     }
     // console.log(myRef.current);
   }
-
+  // function genre(data) {
+  //   return data;
+  // }
   return (
     <div className="movie-home">
       <CListGroup>
@@ -62,54 +74,35 @@ function Moviehome() {
             {movies.map((movie) => {
               rateData.push({ movieId: movie[0], Rating: 0 });
               myRef.current = rateData;
-              // console.log(myRef);
               const movieId = movie[0];
               // console.log(movieId);
               return (
                 <CCol key={movieId}>
                   <CCard className="movie_card">
                     <CCardImage
-                      onClick={() => {
-                        setVisibleXL(!visibleXL);
-                        setModalData(movie);
-                      }}
                       className="movie-cover-img"
                       orientation="top"
                       src={movie[15]}
                     />
-                    <CCardBody>
-                      <CCardTitle className="card-title"
-                        onClick={() => {
-                          setVisibleXL(!visibleXL);
-                          setModalData(movie);
-                        }}
-                      >
-                        {movie[1]}
-                      </CCardTitle>
-                      <CCardText>
+
+                    <CCardBody className="card-body">
+                      <CCardTitle className="card-title">{movie[1]}</CCardTitle>
+                      <div className="button-card-div">
+                        <div className="rate_current">
+                          Current Rating{" "}
+                          <CBadge color="danger"> {movie[13]}</CBadge>
+                        </div>
+
                         <CButton
+                          variant="outline"
                           onClick={() => {
                             setVisibleXL(!visibleXL);
                             setModalData(movie);
                           }}
-                          className="rate_current"
-                          color="secondary"
                         >
-                          Current Rating{" "}
-                          <CBadge color="danger"> {movie[13]}</CBadge>
+                          Details
                         </CButton>
-                      </CCardText>
-
-                      {/* <CButton
-                        onClick={() => {
-                          setVisibleXL(!visibleXL);
-                          setModalData(movie);
-                        }}
-                        >
-                        Details
-                      </CButton> */}
-
-                      <CBadge color="info"> 0 to 5 </CBadge>
+                      </div>
                       <CFormRange
                         onChange={(e) => handleChange(e, movieId)}
                         min="0"
@@ -117,6 +110,9 @@ function Moviehome() {
                         defaultValue="0"
                         id="customRange2"
                       />
+                      <CBadge color="warning">
+                        0 <span> to </span> 5
+                      </CBadge>
                     </CCardBody>
                   </CCard>
                 </CCol>
@@ -159,16 +155,29 @@ function Moviehome() {
         <CModalHeader>
           <CModalTitle>{modalData[1]}</CModalTitle>
         </CModalHeader>
-        <CModalBody> <CBadge color="primary">{modalData[2]}</CBadge>
-        <CAlert color="primary">
-         {modalData[3]} 
-</CAlert>
-<CCallout color="dark">
-  Synopsis:  {modalData[4]} 
-</CCallout>
+        <CModalBody>
+          <div className="modal-flex">
+            <div className="modal-flex-left">
+              <img src={modalData[15]} className="modal-img" alt="" />
+            </div>
+            <div className="modal-flex-right">
+              <CBadge color="primary">{modalData[2]}</CBadge>
+              <span> </span>
+              <CBadge color="danger">{modalData[7]}</CBadge>
+              <CAlert color="primary">
+                <h5>Cast</h5> {modalData[6]}
+              </CAlert>
+              <CAlert color="info">
+                <strong>Director: </strong>
+                {modalData[5]}
+              </CAlert>
+              <CCallout color="dark">{modalData[4]}</CCallout>
+            </div>
+          </div>
+          <br />
         </CModalBody>
       </CModal>
-      
+
       {/* end modal */}
     </div>
   );
