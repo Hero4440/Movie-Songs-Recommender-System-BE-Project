@@ -17,6 +17,7 @@ import {
   CBadge,
   CAlert,
   CCallout,
+  CButtonGroup,
 } from "@coreui/react";
 import { useHistory } from "react-router-dom";
 
@@ -98,32 +99,11 @@ function Finalmovie() {
         </CContainer>
       </CListGroup>
       <div className="float-button">
-        <CButton
-          color="primary"
-          onClick={async () => {
-            // change later
-            const rated = myRef.current;
-            console.log(rated);
-            const response = await fetch("/recommendmovie", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(rated),
-            });
-            if (response.ok) {
-              console.log("response worked");
-              history.push("/recommend_movie");
-            } else {
-              console.log("error");
-            }
-          }}
-        >
-          submit
-        </CButton>
-        <CButton color="primary" onClick={() => history.push("/")}>
-          Back
-        </CButton>
+        <CButtonGroup role="group" aria-label="Basic mixed styles example">
+          <CButton color="danger" onClick={() => history.push("/")}>
+            Back to Home Page
+          </CButton>
+        </CButtonGroup>
       </div>
       {/* modal */}
       <CModal size="xl" visible={visibleXL} onClose={() => setVisibleXL(false)}>

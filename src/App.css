@@ -92,13 +92,15 @@ h1 {
 .modal-img {
   width: 18rem;
 }
-/* .float-buttons {
+.float-button {
+  display: flex;
+  justify-content: space-around;
   position: fixed;
-  bottom: 50px;
-  right: 50px;
-  z-index: 999;
+  top: 90%;
+  left: 86%;
+  width: 170px;
   cursor: pointer;
-} */
+}
 
 .card-title {
   height: 2.5em;

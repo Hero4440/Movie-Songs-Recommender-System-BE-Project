@@ -12,6 +12,7 @@ import {
   CCardTitle,
   CToaster,
   CCardText,
+  CButtonGroup,
   CCardImage,
   CModal,
   CModalHeader,
@@ -151,44 +152,46 @@ function Moviehome() {
         </CContainer>
       </CListGroup>
       <div className="float-button">
-        <CButton
-          color="primary"
-          onClick={async () => {
-            // change later
-            let flag = 0;
-            const rated = myRef.current;
-            console.log(rated);
-            for (let i = 0; i < rated.length; i++) {
-              console.log(rated[i].Rating);
-              if (rated[i].Rating !== 0) {
-                flag = 1;
+        <CButtonGroup role="group" aria-label="Basic mixed styles example">
+          <CButton color="danger" onClick={() => history.push("/")}>
+            Back
+          </CButton>
+          <CButton
+            color="success"
+            onClick={async () => {
+              // change later
+              let flag = 0;
+              const rated = myRef.current;
+              console.log(rated);
+              for (let i = 0; i < rated.length; i++) {
+                console.log(rated[i].Rating);
+                if (rated[i].Rating !== 0) {
+                  flag = 1;
+                }
               }
-            }
-            if (flag === 1) {
-              const response = await fetch("/recommendmovie", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify(rated),
-              });
-              if (response.ok) {
-                console.log("response worked");
-                history.push("/recommend_movie");
+              if (flag === 1) {
+                const response = await fetch("/recommendmovie", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(rated),
+                });
+                if (response.ok) {
+                  console.log("response worked");
+                  history.push("/recommend_movie");
+                } else {
+                  console.log("error");
+                }
               } else {
-                console.log("error");
+                addToast(exampleToast);
+                console.log("errrrr");
               }
-            } else {
-              addToast(exampleToast);
-              console.log("errrrr");
-            }
-          }}
-        >
-          submit
-        </CButton>
-        <CButton color="primary" onClick={() => history.push("/")}>
-          Back
-        </CButton>
+            }}
+          >
+            submit
+          </CButton>
+        </CButtonGroup>
       </div>
       {/* modal */}
       <CModal size="xl" visible={visibleXL} onClose={() => setVisibleXL(false)}>
