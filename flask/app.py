@@ -3,6 +3,7 @@ from flask_jsonpify import jsonpify
 import json
 import pandas as pd
 import Movie
+import Book
 
 movies_recommend_final = []
 
@@ -56,8 +57,16 @@ def moviesresult():
 
 @app.route('/books',methods=['GET','POST'])
 def books():
-    return {'userid':2,
-            'title': 'books '}
+    # For Books Dataframe
+    books = Book.readCSVBooks()
+    return jsonpify(books.values.tolist())
+
+@app.route('/books_votes',methods=['GET'])
+def booksSortByVoteAverage():
+    books = Book.readCSVBooks()
+    books_sort_by_votes = books.sort_values(by='Avg-Rating', ascending=False)
+    return jsonpify(books_sort_by_votes.values.tolist())
+
 
 @app.route('/songs',methods=['GET','POST'])
 def songs():
