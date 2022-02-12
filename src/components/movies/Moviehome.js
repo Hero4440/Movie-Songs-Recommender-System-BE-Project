@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import backv from "../../images/backvid.mp4";
+import backv from "../../images/backvid1.mp4";
 import {
   CListGroup,
   CButton,
@@ -11,7 +11,6 @@ import {
   CCardBody,
   CCardTitle,
   CToaster,
-  CCardText,
   CButtonGroup,
   CCardImage,
   CModal,

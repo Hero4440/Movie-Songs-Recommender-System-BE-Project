@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-
+import backv from "../../images/backvid1.mp4";
 import {
   CListGroup,
   CButton,
@@ -54,6 +54,10 @@ function Finalmovie() {
 
   return (
     <div className="movie-home">
+      <video className="background-css" loop autoPlay>
+        <source src={backv} type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
       <CListGroup>
         <CContainer>
           <CRow>
