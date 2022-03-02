@@ -28,7 +28,7 @@ function Home() {
           <CCol>
             <CCard className="home-card" style={{ width: "18rem" }}>
               <CCardImage orientation="top" src={movieimg} />
-              <CCardBody>
+              <CCardBody className="home-body">
                 <CCardTitle>Movies Recommender</CCardTitle>
                 <CCardText>
                   I'm not looking for judgement, just a yes or no. Can you

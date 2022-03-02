@@ -54,6 +54,9 @@ h1 {
   padding-top: 20px;
   margin-bottom: 20px;
 }
+/* .home-body {
+  background-color: whitesmoke;
+} */
 
 .movie_card {
   display: flex;
@@ -101,14 +104,15 @@ h1 {
   cursor: pointer;
 }
 
-.card-title {
+.cards-title {
+  color: white;
   height: 2.5em;
 }
 .button-card-div {
   display: flex;
 }
-.card-body {
-  background-color: #efefef;
+.cards-body {
+  background-color: rgb(7, 6, 6);
 }
 #customRange2 {
   margin-top: 12px;
@@ -119,8 +123,8 @@ h1 {
   padding: 6px;
   margin-right: 15px;
   border-radius: 4px;
-  color: white;
-  background-color: #697588;
+  color: black;
+  background-color: #ecdbba;
 }
 .modal-flex {
   display: flex;

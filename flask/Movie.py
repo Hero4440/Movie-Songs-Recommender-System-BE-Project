@@ -21,7 +21,6 @@ def moviesDict():
     movies_dict = pd.Series(movies.title.values,index=movies.id).to_dict()
     return movies_dict
 
-
 def ratedListExtractor(rated_dict):
     rated_list = []
     for i in rated_dict:

@@ -118,8 +118,10 @@ function Moviehome() {
                       src={movie[15]}
                     />
 
-                    <CCardBody className="card-body">
-                      <CCardTitle className="card-title">{movie[1]}</CCardTitle>
+                    <CCardBody className="cards-body">
+                      <CCardTitle className="cards-title">
+                        {movie[1]}
+                      </CCardTitle>
                       <div className="button-card-div">
                         <div className="rate_current">
                           Current Rating{" "}
@@ -127,7 +129,7 @@ function Moviehome() {
                         </div>
 
                         <CButton
-                          variant="outline"
+                          color="dark"
                           onClick={() => {
                             setVisibleXL(!visibleXL);
                             setModalData(movie);
