@@ -86,4 +86,4 @@ def getBooksDataframeFromNames(books3, recommend_collab_names):
     recommend_collab = books3[books3['Book-Title'].isin(recommend_collab_names)].groupby('Book-Title').first()
     recommend_collab = recommend_collab.sort_values(by='Avg-Rating', ascending=False)
     recommend_collab.reset_index(inplace=True, drop=False)
-    return recommend_collab.head(10)
+    return recommend_collab.head(12)
