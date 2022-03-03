@@ -33,20 +33,21 @@ function Finalmovie() {
   useEffect(() => {
     fetch("/book_result").then((response) =>
       response.json().then((data) => {
-        const newData = data.slice(0, 12);
-        for (let i = 0, len = newData.length; i < len; i++) {
-          // regex
-          newData[i][2] = newData[i][2].replace(/['"]+/g, "");
-          newData[i][2] = newData[i][2].slice(1, -1);
-          newData[i][6] = newData[i][6].replace(/['"]+/g, "");
-          newData[i][6] = newData[i][6].slice(1, -1);
-          newData[i][4] = newData[i][4].replace(/['"]+/g, "");
-          newData[i][4] = newData[i][4].slice(1, -1);
-          newData[i][5] = newData[i][5].replace(/['"]+/g, "");
-          newData[i][5] = newData[i][5].slice(1, -1);
-        }
-        console.log(newData);
-        setMovies(newData);
+        console.log(data);
+        // const newData = data.slice(0, 12);
+        // for (let i = 0, len = newData.length; i < len; i++) {
+        //   // regex
+        //   newData[i][2] = newData[i][2].replace(/['"]+/g, "");
+        //   newData[i][2] = newData[i][2].slice(1, -1);
+        //   newData[i][6] = newData[i][6].replace(/['"]+/g, "");
+        //   newData[i][6] = newData[i][6].slice(1, -1);
+        //   newData[i][4] = newData[i][4].replace(/['"]+/g, "");
+        //   newData[i][4] = newData[i][4].slice(1, -1);
+        //   newData[i][5] = newData[i][5].replace(/['"]+/g, "");
+        //   newData[i][5] = newData[i][5].slice(1, -1);
+        // }
+        // console.log(newData);
+        setMovies(data);
       })
     );
   }, []);
@@ -72,15 +73,17 @@ function Finalmovie() {
                     <CCardImage
                       className="movie-cover-img"
                       orientation="top"
-                      src={movie[15]}
+                      src={movie[5]}
                     />
 
                     <CCardBody className="cards-body">
-                      <CCardTitle className="cards-title">{movie[1]}</CCardTitle>
+                      <CCardTitle className="cards-title">
+                        {movie[0]}
+                      </CCardTitle>
                       <div className="button-card-div">
                         <div className="rate_current">
                           Current Rating{" "}
-                          <CBadge color="danger"> {movie[13]}</CBadge>
+                          <CBadge color="danger"> {movie[6]}</CBadge>
                         </div>
 
                         <CButton
@@ -112,25 +115,28 @@ function Finalmovie() {
       {/* modal */}
       <CModal size="xl" visible={visibleXL} onClose={() => setVisibleXL(false)}>
         <CModalHeader>
-          <CModalTitle>{modalData[1]}</CModalTitle>
+          <CModalTitle>{modalData[0]}</CModalTitle>
         </CModalHeader>
         <CModalBody>
           <div className="modal-flex">
             <div className="modal-flex-left">
-              <img src={modalData[15]} className="modal-img" alt="" />
+              <img src={modalData[5]} className="modal-img" alt="" />
             </div>
             <div className="modal-flex-right">
-              <CBadge color="primary">{modalData[2]}</CBadge>
+              <CBadge color="primary">{modalData[3]}</CBadge>
               <span> </span>
-              <CBadge color="danger">{modalData[7]}</CBadge>
+              <CBadge color="danger">{modalData[6]}</CBadge>
               <CAlert color="primary">
-                <h5>Cast</h5> {modalData[6]}
+                <h5>Author</h5> {modalData[2]}
               </CAlert>
               <CAlert color="info">
-                <strong>Director: </strong>
-                {modalData[5]}
+                <strong>Publisher: </strong>
+                {modalData[4]}
               </CAlert>
-              <CCallout color="dark">{modalData[4]}</CCallout>
+              <CCallout color="dark">
+                <strong>ISBN </strong>
+                {modalData[1]}
+              </CCallout>
             </div>
           </div>
           <br />

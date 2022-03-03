@@ -41,8 +41,8 @@ function App() {
             <Route exact path="/books" element={<Bookshome />}>
               <Bookshome />
             </Route>
-            <Route exact path="/recommend_book" element={<Finalmovie />}>
-              <Finalmovie />
+            <Route exact path="/recommend_book" element={<Finalbook />}>
+              <Finalbook />
             </Route>
           </Switch>
         </React.Suspense>

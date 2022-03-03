@@ -11,7 +11,7 @@ books_recommend_final = []
 def recommendMovieFunction(Rated_data):
 
     movies_list = Movie.ratedListExtractor(Rated_data)
-    user_recommendations = 10
+    user_recommendations = 12
     
     movies = Movie.readCSVMoviesBackend()
     corrMatrix = Movie.readCSVCorr()
@@ -28,7 +28,7 @@ def recommendMovieFunction(Rated_data):
 def recommendBookFunction(Rated_data):
 
     books_list = Book.ratedListExtractor(Rated_data)
-    user_recommendations = 10
+    user_recommendations = 12
     
     books = Book.readCSVBooks()
     countries_combine_pivot = Book.readCSVPivotTable()
