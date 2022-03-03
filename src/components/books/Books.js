@@ -1,104 +1,153 @@
 import React, { useEffect, useState, useRef } from "react";
-import movieimg from "../../images/movie.png";
+import backv from "../../images/backvid1.mp4";
 import {
   CListGroup,
   CButton,
   CFormRange,
-  CFormLabel,
   CContainer,
   CRow,
   CCol,
   CCard,
   CCardBody,
   CCardTitle,
-  CCardText,
+  CToaster,
+  CButtonGroup,
   CCardImage,
   CModal,
   CModalHeader,
   CModalTitle,
   CModalBody,
   CBadge,
+  CAlert,
+  CCallout,
+  CToast,
+  CToastHeader,
+  CToastBody,
 } from "@coreui/react";
 import { useHistory } from "react-router-dom";
-
-function Books() {
+function Moviehome() {
   const history = useHistory();
-  const [books, setBooks] = useState([]);
+  const [movies, setMovies] = useState([]);
   const [visibleXL, setVisibleXL] = useState(false);
   // modal
   const [modalData, setModalData] = useState([]);
   // Use Ref
   const myRef = useRef([]);
   const rateData = [];
-  useEffect(() => {             
-    /*To do change url */
-    
-    fetch("/movies_votes").then((response) =>
+  useEffect(() => {
+    fetch("/books_votes").then((response) =>
       response.json().then((data) => {
-        setBooks(data.slice(0, 10));
+        const newData = data.slice(0, 12);
+        // for (let i = 0, len = newData.length; i < len; i++) {
+        //   // regex
+        //   newData[i][2] = newData[i][2].replace(/['"]+/g, "");
+        //   newData[i][2] = newData[i][2].slice(1, -1);
+        //   newData[i][6] = newData[i][6].replace(/['"]+/g, "");
+        //   newData[i][6] = newData[i][6].slice(1, -1);
+        //   newData[i][5] = newData[i][5].replace(/['"]+/g, "");
+        //   newData[i][5] = newData[i][5].slice(1, -1);
+        // }
+        console.log(newData);
+        setMovies(newData);
       })
     );
   }, []);
   console.log(modalData);
 
-  function handleChange(e, movieId) {
+  function handleChange(e, bookId) {
     // console.log(e.target.value);
     // console.log(myRef.current[0]);
-    // console.log(movieId);
-    // console.log(myRef.current[0]["movieId"]);
+    // console.log(bookId);
+    // console.log(myRef.current[0]["bookId"]);
     for (let i = 0, len = myRef.current.length; i < len; i++) {
-      if (movieId === myRef.current[i]["movieId"]) {
+      if (bookId === myRef.current[i]["bookId"]) {
         myRef.current[i]["Rating"] = parseInt(e.target.value);
         // console.log(myRef.current[i]["Rating"]);
       }
     }
     // console.log(myRef.current);
   }
+  // function genre(data) {
+  //   return data;
+  // }
 
+  // toast
+  const [toast, addToast] = useState(0);
+  const toaster = useRef();
+  const exampleToast = (
+    <CToast title="Warning">
+      <CToastHeader close>
+        <svg
+          className="rounded me-2"
+          width="20"
+          height="20"
+          xmlns="http://www.w3.org/2000/svg"
+          preserveAspectRatio="xMidYMid slice"
+          focusable="false"
+          role="img"
+        >
+          <rect width="100%" height="100%" fill="#F76E11"></rect>
+        </svg>
+        <strong className="me-auto">WARNING</strong>
+        <small>exception Occured</small>
+      </CToastHeader>
+      <CToastBody>Please Atleast Rate One Movie!!!</CToastBody>
+    </CToast>
+  );
   return (
     <div className="movie-home">
+      <video className="background-css" loop autoPlay>
+        <source src={backv} type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+
       <CListGroup>
         <CContainer>
           <CRow>
-            {books.map((book) => {
-              rateData.push({ movieId: book[0], Rating: 0 });
+            {movies.map((movie) => {
+              rateData.push({ bookId: movie[0], Rating: 0 });
               myRef.current = rateData;
-              // console.log(myRef);
-              const movieId = book[0];
-              // console.log(movieId);
+              const bookId = movie[0];
+              // console.log(bookId);
               return (
-                <CCol key={movieId}>
+                <CCol key={bookId}>
                   <CCard className="movie_card">
-                    <CCardImage orientation="top" src={movieimg} />
-                    <CCardBody>
-                      <CCardTitle>{book[1]}</CCardTitle>
-                      <CCardText>
-                        <CButton className="rate_current" shape="rounded-pill" color="secondary">
-                          Current Rating{" "}
-                          <CBadge color="danger"> { book[13]}</CBadge>
-                        </CButton>
-                      </CCardText>
+                    <CCardImage
+                      className="movie-cover-img"
+                      orientation="top"
+                      src={movie[5]}
+                    />
 
-                      <CButton
-                        onClick={() => {
-                          setVisibleXL(!visibleXL);
-                          setModalData( book);
-                        }}
-                      >
-                        Details
-                      </CButton>
-                      <br />
-                      <CFormLabel htmlFor="customRange2">
-                        Rate Movies
-                      </CFormLabel>
-                      <CBadge color="warning"> 0-5 </CBadge>
+                    <CCardBody className="cards-body">
+                      <CCardTitle className="cards-title">
+                        {movie[1]}
+                      </CCardTitle>
+                      <div className="button-card-div">
+                        <div className="rate_current">
+                          Current Rating{" "}
+                          <CBadge color="danger"> {movie[6]}</CBadge>
+                        </div>
+
+                        <CButton
+                          color="dark"
+                          onClick={() => {
+                            setVisibleXL(!visibleXL);
+                            setModalData(movie);
+                          }}
+                        >
+                          Details
+                        </CButton>
+                      </div>
                       <CFormRange
-                        onChange={(e) => handleChange(e, movieId)}
+                        onChange={(e) => handleChange(e, bookId)}
                         min="0"
                         max="5"
                         defaultValue="0"
                         id="customRange2"
                       />
+                      <CBadge color="warning">
+                        0 <span> to </span> 5
+                      </CBadge>
                     </CCardBody>
                   </CCard>
                 </CCol>
@@ -108,45 +157,82 @@ function Books() {
           {/* </CCard> */}
         </CContainer>
       </CListGroup>
-
-      <CButton
-        color="primary"
-        onClick={async () => {
-          // change later
-          const rated = myRef.current;
-          console.log(rated);
-          const response = await fetch("/recommendmovie", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(rated),
-          });
-          if (response.ok) {
-            console.log("response worked");
-            history.push("/recommend_movie");
-            /*To do change */ 
-            
-          } else {
-            console.log("error");
-          }
-        }}
-      >
-        submit
-      </CButton>
-      <CButton color="primary" onClick={() => history.push("/")}>
-        Back
-      </CButton>
+      <div className="float-button">
+        <CButtonGroup role="group" aria-label="Basic mixed styles example">
+          <CButton color="danger" onClick={() => history.push("/")}>
+            Back
+          </CButton>
+          <CButton
+            color="success"
+            onClick={async () => {
+              // change later
+              let flag = 0;
+              const rated = myRef.current;
+              console.log(rated);
+              for (let i = 0; i < rated.length; i++) {
+                console.log(rated[i].Rating);
+                if (rated[i].Rating !== 0) {
+                  flag = 1;
+                }
+              }
+              if (flag === 1) {
+                const response = await fetch("/recommendbook", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(rated),
+                });
+                if (response.ok) {
+                  console.log("response worked");
+                  history.push("/recommend_book");
+                } else {
+                  console.log("error");
+                }
+              } else {
+                addToast(exampleToast);
+                console.log("errrrr");
+              }
+            }}
+          >
+            submit
+          </CButton>
+        </CButtonGroup>
+      </div>
       {/* modal */}
       <CModal size="xl" visible={visibleXL} onClose={() => setVisibleXL(false)}>
         <CModalHeader>
-          <CModalTitle>{modalData[1]}</CModalTitle>
+          <CModalTitle>{modalData[2]}</CModalTitle>
         </CModalHeader>
-        <CModalBody>{modalData[2]}</CModalBody>
+        <CModalBody>
+          <div className="modal-flex">
+            <div className="modal-flex-left">
+              <img src={modalData[5]} className="modal-img" alt="" />
+            </div>
+            <div className="modal-flex-right">
+              <CBadge color="primary">{modalData[3]}</CBadge>
+              <span> </span>
+              <CBadge color="danger">{modalData[6]}</CBadge>
+              <CAlert color="primary">
+                <h5>Author</h5> {modalData[2]}
+              </CAlert>
+              <CAlert color="info">
+                <strong>Publisher: </strong>
+                {modalData[4]}
+              </CAlert>
+              <CCallout color="dark">
+                <strong>ISBN: </strong>
+                {modalData[0]}
+              </CCallout>
+            </div>
+          </div>
+          <br />
+        </CModalBody>
       </CModal>
+      <CToaster ref={toaster} push={toast} placement="top-end" />
       {/* end modal */}
     </div>
   );
 }
 
-export default Books;
+export default Moviehome;

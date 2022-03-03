@@ -5,6 +5,8 @@ import Songhome from "./components/songs/Songs.js";
 import Bookshome from "./components/books/Books.js";
 import Home from "./components/home/Home.js";
 import Finalmovie from "./components/movies/Finalmovie.js";
+import Finalbook from "./components/books/Finalbook.js";
+
 import "./App.css";
 const loading = (
   <div class="ui segment">
@@ -38,6 +40,9 @@ function App() {
             </Route>
             <Route exact path="/books" element={<Bookshome />}>
               <Bookshome />
+            </Route>
+            <Route exact path="/recommend_book" element={<Finalmovie />}>
+              <Finalmovie />
             </Route>
           </Switch>
         </React.Suspense>

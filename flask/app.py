@@ -66,6 +66,19 @@ def booksSortByVoteAverage():
     books = Book.readCSVBooks()
     books_sort_by_votes = books.sort_values(by='Avg-Rating', ascending=False)
     return jsonpify(books_sort_by_votes.values.tolist())
+@app.route('/recommendbook',methods=['POST'])
+def recommendbook():
+    Rated_data = request.get_json()
+    
+    recommendMovieFunction(Rated_data)
+
+    return "Done", 201
+
+@app.route('/book_result',methods=['GET'])
+def booksresult():
+#    get final data
+    # print(movies_recommend_final)
+    return jsonpify(movies_recommend_final)
 
 
 @app.route('/songs',methods=['GET','POST'])
