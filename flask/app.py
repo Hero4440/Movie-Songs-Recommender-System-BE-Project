@@ -6,6 +6,7 @@ import Movie
 import Book
 
 movies_recommend_final = []
+books_recommend_final = []
 
 def recommendMovieFunction(Rated_data):
 
@@ -21,6 +22,22 @@ def recommendMovieFunction(Rated_data):
     movies_recommend_final_id_list = collab + content
     global movies_recommend_final 
     movies_recommend_final = movies[movies['id'].isin(movies_recommend_final_id_list)].sort_values(by='vote_average', ascending=False).values.tolist()
+
+    return None
+
+def recommendBookFunction(Rated_data):
+
+    books_list = Book.ratedListExtractor(Rated_data)
+    user_recommendations = 10
+    
+    books = Book.readCSVBooks()
+    countries_combine_pivot = Book.readCSVPivotTable()
+    
+    collab = Book.recommendCollab(books, countries_combine_pivot, books_list, user_recommendations)
+    
+    books_recommend_final_names_list = collab
+    global books_recommend_final 
+    books_recommend_final = Book.getBooksDataframeFromNames(books, books_recommend_final_names_list).values.tolist()
 
     return None
 
@@ -66,19 +83,21 @@ def booksSortByVoteAverage():
     books = Book.readCSVBooks()
     books_sort_by_votes = books.sort_values(by='Avg-Rating', ascending=False)
     return jsonpify(books_sort_by_votes.values.tolist())
+
 @app.route('/recommendbook',methods=['POST'])
 def recommendbook():
     Rated_data = request.get_json()
-    
-    recommendMovieFunction(Rated_data)
+    print("/recommendbook started")
+    recommendBookFunction(Rated_data)
+    print(books_recommend_final)
 
     return "Done", 201
 
 @app.route('/book_result',methods=['GET'])
 def booksresult():
 #    get final data
-    # print(movies_recommend_final)
-    return jsonpify(movies_recommend_final)
+    # print(books_recommend_final)
+    return jsonpify(books_recommend_final)
 
 
 @app.route('/songs',methods=['GET','POST'])
