@@ -14,7 +14,7 @@ from operator import itemgetter
 
 
 def readCSVSongs():
-    data = pd.read_csv('data3_8010.csv')
+    data = pd.read_csv('api_data/data3_8010.csv')
     return data
 
 # -------------------------------------------------------
