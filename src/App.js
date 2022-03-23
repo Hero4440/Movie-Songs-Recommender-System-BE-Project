@@ -8,6 +8,13 @@ import Finalmovie from "./components/movies/Finalmovie.js";
 import Finalbook from "./components/books/Finalbook.js";
 
 import "./App.css";
+import Signup from "./Signup.js";
+import Login from "./Login.js"
+import PrivateRoute from "./PrivateRoute.js";
+import { Container } from "react-bootstrap";
+import { AuthProvider } from "./AuthContext.js";
+import ForgotPassword from "./ForgotPassword.js";
+import UpdateProfile from "./UpdateProfile.js";
 const loading = (
   <div class="ui segment">
     <p></p>
@@ -23,30 +30,70 @@ function App() {
   // };
   return (
     <div className="App">
+      <AuthProvider>
       <BrowserRouter>
         <React.Suspense fallback={loading}>
           <Switch>
-            <Route exact path="/" element={<Home />}>
-              <Home />
-            </Route>
+            <PrivateRoute exact path="/" element={<Home />}>
+              <Home /> 
+            </PrivateRoute>
+
+           
+            <Route path="/signup" component={Signup}>
+              
+              <Container
+              className="d-flex align-items-center justify-content-center"
+              style={{minHeight:"100vh"}}
+              >
+                <div className="W=100" style={{maxWidth:"400px"}}>
+              <Signup /> 
+              </div>
+              </Container>
+             
+              </Route>
+          
+
+            
+            <Route path="/login" component={Login}>
+              
+              <Container
+              className="d-flex align-items-center justify-content-center"
+              style={{minHeight:"100vh"}}
+              >
+                <div className="W=100" style={{maxWidth:"400px"}}>
+              <Login /> 
+              </div>
+              </Container>
+              </Route>
+
+              <Route path="/forgot-password" component={ForgotPassword}></Route>
+            
+              <PrivateRoute path="/update-profile" component={UpdateProfile}></PrivateRoute>
+            
             <Route exact path="/movies" element={<Moviehome />}>
               <Moviehome />
             </Route>
+
             <Route exact path="/recommend_movie" element={<Finalmovie />}>
               <Finalmovie />
             </Route>
+
             <Route exact path="/songs" element={<Songhome />}>
               <Songhome />
             </Route>
+
             <Route exact path="/books" element={<Bookshome />}>
               <Bookshome />
             </Route>
+
             <Route exact path="/recommend_book" element={<Finalbook />}>
               <Finalbook />
             </Route>
+
           </Switch>
         </React.Suspense>
       </BrowserRouter>
+      </AuthProvider>
     </div>
   );
 }
