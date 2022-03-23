@@ -4,9 +4,11 @@ import json
 import pandas as pd
 import Movie
 import Book
+import Song
 
 movies_recommend_final = []
 books_recommend_final = []
+songs_recommend_final = []
 
 def recommendMovieFunction(Rated_data):
 
@@ -40,6 +42,23 @@ def recommendBookFunction(Rated_data):
     books_recommend_final = Book.getBooksDataframeFromNames(books, books_recommend_final_names_list).values.tolist()
 
     return None
+
+def recommendSongFunction(Rated_data):
+
+    # songs_list = Song.ratedListExtractor(Rated_data)
+    no_of_recommendations = 21
+    
+    songs = Song.readCSVSongs()
+    
+    recommendations_id_list = Song.recommendSongs(songs, Rated_data, no_of_recommendations)
+    
+    songs_recommend_final_names_list = recommendations_id_list
+    global songs_recommend_final
+    songs_recommend_final = Song.getDataframeFromIDList(songs, songs_recommend_final_names_list)
+    
+    
+    return None
+
 
 
 app = Flask(__name__)
@@ -102,8 +121,31 @@ def booksresult():
 
 @app.route('/songs',methods=['GET','POST'])
 def songs():
-    return {'userid':3,
-            'title': 'songs '}
+    # For Songss Dataframe
+    songs = Song.readCSVSongs()
+    return jsonpify(songs.values.tolist())
+
+# @app.route('/songs_votes',methods=['GET'])
+# def songsSortByVoteAverage():
+#     songs = Song.readCSVSongs()
+#     songs_sort_by_votes = songs.sort_values(by='Avg-Rating', ascending=False)
+#     return jsonpify(songs_sort_by_votes.values.tolist())
+
+@app.route('/recommendsong',methods=['POST'])
+def recommendsong():
+    Rated_data = request.get_json()
+    print("/recommendsong started")
+    recommendSongFunction(Rated_data)
+    print(songs_recommend_final)
+
+    return "Done", 201
+
+@app.route('/song_result',methods=['GET'])
+def songsresult():
+#    get final data
+    # print(books_recommend_final)
+    return jsonpify(songs_recommend_final)
+    
     
     
 
