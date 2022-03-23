@@ -125,11 +125,11 @@ def songs():
     songs = Song.readCSVSongs()
     return jsonpify(songs.values.tolist())
 
-# @app.route('/songs_votes',methods=['GET'])
-# def songsSortByVoteAverage():
-#     songs = Song.readCSVSongs()
-#     songs_sort_by_votes = songs.sort_values(by='Avg-Rating', ascending=False)
-#     return jsonpify(songs_sort_by_votes.values.tolist())
+@app.route('/songs_popularity',methods=['GET'])
+def songsSortByPopularity():
+    songs = Song.readCSVSongs()
+    songs_sort_by_votes = songs.sort_values(by='popularity', ascending=False)
+    return jsonpify(songs_sort_by_votes.values.tolist())
 
 @app.route('/recommendsong',methods=['POST'])
 def recommendsong():
