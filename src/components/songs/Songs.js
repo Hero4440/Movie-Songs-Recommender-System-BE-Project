@@ -41,15 +41,7 @@ function Moviehome() {
     fetch("/songs_popularity").then((response) =>
       response.json().then((data) => {
         const newData = data.slice(0, 12);
-        // for (let i = 0, len = newData.length; i < len; i++) {
-        //   // regex
-        //   newData[i][2] = newData[i][2].replace(/['"]+/g, "");
-        //   newData[i][2] = newData[i][2].slice(1, -1);
-        //   newData[i][6] = newData[i][6].replace(/['"]+/g, "");
-        //   newData[i][6] = newData[i][6].slice(1, -1);
-        //   newData[i][5] = newData[i][5].replace(/['"]+/g, "");
-        //   newData[i][5] = newData[i][5].slice(1, -1);
-        // }
+       
         console.log(newData);
         setMovies(newData);
       })
@@ -58,10 +50,7 @@ function Moviehome() {
   console.log(modalData);
 
   function handleChange(e, bookId) {
-    // console.log(e.target.value);
-    // console.log(myRef.current[0]);
-    // console.log(bookId);
-    // console.log(myRef.current[0]["bookId"]);
+    
     for (let i = 0, len = myRef.current.length; i < len; i++) {
       if (bookId === myRef.current[i]["bookId"]) {
         myRef.current[i]["Rating"] = parseInt(e.target.value);
@@ -121,7 +110,7 @@ function Moviehome() {
                       src={movie[5]}
                     /> */}
 
-                    <CCardBody className="cards-body">
+                    <CCardBody className="song_cards-body">
                       <CCardTitle className="cards-title">
                         {movie[1]}
                       </CCardTitle>
@@ -194,7 +183,7 @@ function Moviehome() {
                 }
               }
               if (flag === 1) {
-                const response = await fetch("/recommendbook", {
+                const response = await fetch("/recommendsong", {
                   method: "POST",
                   headers: {
                     "Content-Type": "application/json",

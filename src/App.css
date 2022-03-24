@@ -75,7 +75,7 @@ display: flex;
 justify-content: center;
 padding: 0 !important;
 width: 15rem;
-height: 20rem;
+height: 18rem;
 margin: 10px 5px 50px 5px;
 border-radius: 10px;
 
@@ -129,6 +129,7 @@ border-radius: 10px;
 }
 .cards-body {
   background-color: rgb(7, 6, 6);
+  
 }
 #customRange2 {
   margin-top: 12px;
@@ -158,6 +159,14 @@ border-radius: 10px;
 
 .artist_name{
   color: rgb(255, 255, 255);
-  height: 200px;
-  background-color: white;
+ 
+ 
+}
+
+.song_cards-body {
+  background-color: rgb(7, 6, 6);
+}
+
+.release-year{
+  color: white;
 }
