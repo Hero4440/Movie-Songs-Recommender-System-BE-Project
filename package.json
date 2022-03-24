@@ -5,6 +5,8 @@
   "proxy": "http://localhost:5000/",
   "dependencies": {
     "@coreui/coreui": "^4.1.0",
+    "@coreui/icons": "^2.1.0",
+    "@coreui/icons-react": "^2.0.1",
     "@coreui/react": "^4.1.2",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
