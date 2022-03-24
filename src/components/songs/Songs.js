@@ -125,10 +125,10 @@ function Moviehome() {
                         </CCardText>
                       </div>
 
-                      <div className="button-card-div">
-                        <div className="rate_current">
-                          Current Rating{" "}
-                          <CBadge color="danger"> {movie[6]}</CBadge>
+                      <div className="button-card-div song_popularity">
+                        <div className="rate_current ">
+                          Popularity{" "}
+                          <CBadge color="danger"> {movie[3]}</CBadge>
                         </div>
 
 

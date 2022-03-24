@@ -79,7 +79,6 @@ height: 18rem;
 margin: 10px 5px 50px 5px;
 border-radius: 10px;
 
-
 }
 
 
@@ -129,6 +128,7 @@ border-radius: 10px;
 }
 .cards-body {
   background-color: rgb(7, 6, 6);
+  /* background-image: linear-gradient(to bottom right, red, yellow); */
   
 }
 #customRange2 {
@@ -159,14 +159,27 @@ border-radius: 10px;
 
 .artist_name{
   color: rgb(255, 255, 255);
- 
+  size: 200px;
  
 }
 
+
 .song_cards-body {
-  background-color: rgb(7, 6, 6);
+  /* background-color: rgb(7, 6, 6); */
+  background-image: linear-gradient(to bottom right,#6E3CBC,#B8E4F0);
+  /* background-image: linear-gradient(to bottom right,#42C2FF,#B8FFF9); */
 }
 
 .release-year{
   color: white;
+}
+
+/* .song_pop{
+  width: 30px;
+ 
+} */
+.song_popularity{
+  padding-top: 10px;
+  padding-bottom: 10px;
+  width: 220px;
 }
