@@ -46,6 +46,7 @@ def getNamesfromID(songs_list, id_names_list):
 def recommendOneSong(data, input_song_id, no_of_recommendations=10):
     
     distance = list()
+    print("Input song ID for recommendOneSong Function = ",input_song_id)
     song = data[data['id'] == input_song_id].head(1).values[0]
     recommendations = data[data['id'] != input_song_id]
     
@@ -62,29 +63,39 @@ def recommendOneSong(data, input_song_id, no_of_recommendations=10):
 
 # --------------------------------------------------------
 
-def ratedListExtractor(rated_songs_list):
+def ratedListExtractor(rated_songs_dict):
     high_rated_list = []
     
-    for i in rated_songs_list:
-        if i[1] >= 3:
-            high_rated_list.append(i[0])
+    for i in rated_songs_dict:
+        dict_value = list(i.values())
+        print(dict_value)
+        if dict_value[1] >= 3:
+            high_rated_list.append(dict_value[0])
+            print("-> selected = ", dict_value[0])
     return high_rated_list
 # --------------------------------------------------------
 
 def recommendSongs(data, rated_songs_dict, no_of_recommendations):
     
     high_rated_list = ratedListExtractor(rated_songs_dict)
+    print("\nHIGH RATED LIST", high_rated_list)
     recommendations = []
     for i in high_rated_list:
         recommendations = recommendations + recommendOneSong(data, i, no_of_recommendations)
         
-    
-    recommend_all_songs = sorted(recommendations, key = itemgetter(20))
-    
+    print("\n\nRECOMMEND LISTS of LISTS executed")
+    # print(recommendations)
+    # recommend_all_songs = sorted(recommendations, key = itemgetter(20))
+    # print("\n\nRECOMMEND ALL SONGS")
+    # print(recommend_all_songs)
     
     recommend_final_id_list = []
-    for i in recommend_all_songs[:no_of_recommendations]:
+    for i in recommendations[:no_of_recommendations]:
         recommend_final_id_list.append(i[0])
+    
+    # recommend_final_id_list = []
+    # for i in recommend_all_songs[:no_of_recommendations]:
+    #     recommend_final_id_list.append(i[0])
     
     return recommend_final_id_list
 
