@@ -192,7 +192,7 @@ function Moviehome() {
                 });
                 if (response.ok) {
                   console.log("response worked");
-                  history.push("/recommend_book");
+                  history.push("/recommend_song");
                 } else {
                   console.log("error");
                 }

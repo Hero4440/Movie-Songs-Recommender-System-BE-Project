@@ -6,7 +6,7 @@ import Bookshome from "./components/books/Books.js";
 import Home from "./components/home/Home.js";
 import Finalmovie from "./components/movies/Finalmovie.js";
 import Finalbook from "./components/books/Finalbook.js";
-
+import Finalsong from "./components/songs/Finalsongs.js"
 import "./App.css";
 const loading = (
   <div class="ui segment">
@@ -37,6 +37,9 @@ function App() {
             </Route>
             <Route exact path="/songs" element={<Songhome />}>
               <Songhome />
+            </Route>
+            <Route exact path="/recommend_song" element={<Finalsong />}>
+              <Finalsong />
             </Route>
             <Route exact path="/books" element={<Bookshome />}>
               <Bookshome />
