@@ -17,7 +17,8 @@ import {
   CBadge,
   CAlert,
   CCallout,
-  CButtonGroup,CCardText,
+  CButtonGroup,
+  CCardText,
 } from "@coreui/react";
 import { useHistory } from "react-router-dom";
 
@@ -69,38 +70,21 @@ function Finalmovie() {
                         {movie[1]}
                       </CCardTitle>
 
-                      <CCardText className="artist-name" >
-                        {movie[2]}
-                      </CCardText>
+                      <CCardText className="artist-name">{movie[2]}</CCardText>
 
                       <div className="release-year">
-                        <CCardText>
-                          {movie[4]}
-                        </CCardText>
+                        <CCardText>{movie[4]}</CCardText>
                       </div>
 
                       <div className="button-card-div song_popularity">
                         <div className="rate_current ">
-                          Popularity{" "}
-                          <CBadge color="danger"> {movie[3]}</CBadge>
+                          Popularity <CBadge color="danger"> {movie[3]}</CBadge>
                         </div>
 
-
-                      
-                        <CButton 
-                          color="dark"
-                          onClick={() => {
-                            setVisibleXL(!visibleXL);
-                           
-                            // setModalData(movie);
-                          }}
-                          href={movie[18]} target="_blank"
-                        >
+                        <CButton color="dark" href={movie[18]} target="_blank">
                           Spotify
                         </CButton>
                       </div>
-                    
-                    
                     </CCardBody>
                   </CCard>
                 </CCol>
