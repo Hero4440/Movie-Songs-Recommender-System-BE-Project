@@ -21,7 +21,7 @@ function Home() {
 
   return (
     <div className="home">
-      <h1 className="home-heading">Multirater</h1>
+      <h1 className="home-heading">MultiRater</h1>
 
       <CContainer>
         <CRow className="align-items-center">
@@ -34,9 +34,7 @@ function Home() {
                   I'm not looking for judgement, just a yes or no. Can you
                   assimilate a giraffe? I'll be with Reuben in my workshop while
                   you guys are having another day in Phil Collin's proverbial
-                  paradise. It's not like we can do this every week, we get 3 or
-                  4 more of these tops. Shadow Jacker, you haven't come out of
-                  your masturbation cave in eons!
+                  paradise.
                 </CCardText>
                 <CButton
                   color="primary"
@@ -58,9 +56,7 @@ function Home() {
                   I'm not looking for judgement, just a yes or no. Can you
                   assimilate a giraffe? I'll be with Reuben in my workshop while
                   you guys are having another day in Phil Collin's proverbial
-                  paradise. It's not like we can do this every week, we get 3 or
-                  4 more of these tops. Shadow Jacker, you haven't come out of
-                  your masturbation cave in eons!
+                  paradise.
                 </CCardText>
                 <CButton
                   color="primary"
@@ -82,9 +78,7 @@ function Home() {
                   I'm not looking for judgement, just a yes or no. Can you
                   assimilate a giraffe? I'll be with Reuben in my workshop while
                   you guys are having another day in Phil Collin's proverbial
-                  paradise. It's not like we can do this every week, we get 3 or
-                  4 more of these tops. Shadow Jacker, you haven't come out of
-                  your masturbation cave in eons!
+                  paradise.
                 </CCardText>
                 <CButton
                   color="primary"

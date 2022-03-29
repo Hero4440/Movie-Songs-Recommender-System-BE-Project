@@ -70,7 +70,7 @@ function Finalmovie() {
                         {movie[1]}
                       </CCardTitle>
 
-                      <CCardText className="artist-name">{movie[2]}</CCardText>
+                      <CCardText id="artist" className="artist-name">{movie[2]}</CCardText>
 
                       <div className="release-year">
                         <CCardText>{movie[4]}</CCardText>

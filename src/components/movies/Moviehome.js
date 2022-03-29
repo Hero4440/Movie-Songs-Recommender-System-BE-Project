@@ -100,7 +100,7 @@ function Moviehome() {
         <source src={backv} type="video/mp4" />
         Your browser does not support the video tag.
       </video>
-
+    <h2>Please Rate Your Favorite Movies !!!</h2>
       <CListGroup>
         <CContainer>
           <CRow>

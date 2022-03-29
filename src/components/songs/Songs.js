@@ -47,7 +47,7 @@ function Moviehome() {
       })
     );
   }, []);
-  console.log(modalData);
+
 
   function handleChange(e, bookId) {
     
@@ -189,7 +189,7 @@ function Moviehome() {
                     "Content-Type": "application/json",
                   },
                   body: JSON.stringify(rated),
-                });
+                })
                 if (response.ok) {
                   console.log("response worked");
                   history.push("/recommend_song");
