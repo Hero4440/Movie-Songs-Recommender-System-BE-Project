@@ -68,23 +68,19 @@ def ratedListExtractor(rated_songs_dict):
     
     for i in rated_songs_dict:
         dict_value = list(i.values())
-        print(dict_value)
         if dict_value[1] >= 3:
             high_rated_list.append(dict_value[0])
-            print("-> selected = ", dict_value[0])
     return high_rated_list
 # --------------------------------------------------------
 
 def recommendSongs(data, rated_songs_dict, no_of_recommendations):
     
     high_rated_list = ratedListExtractor(rated_songs_dict)
-    print("\nHIGH RATED LIST", high_rated_list)
+
     recommendations = []
     for i in high_rated_list:
         recommendations = recommendations + recommendOneSong(data, i, no_of_recommendations)
         
-    print("\n\nRECOMMEND LISTS of LISTS executed")
-    # print(recommendations)
     # recommend_all_songs = sorted(recommendations, key = itemgetter(20))
     # print("\n\nRECOMMEND ALL SONGS")
     # print(recommend_all_songs)
@@ -93,23 +89,5 @@ def recommendSongs(data, rated_songs_dict, no_of_recommendations):
     for i in recommendations[:no_of_recommendations]:
         recommend_final_id_list.append(i[0])
     
-    # recommend_final_id_list = []
-    # for i in recommend_all_songs[:no_of_recommendations]:
-    #     recommend_final_id_list.append(i[0])
-    
     return recommend_final_id_list
 
-
-# data = addFeaturesColumn(readCSVSongs())
-# id_names_list = data[['id','name']].values.tolist()
-
-# random_songs_list = data.sample(5).id.values.tolist()
-# ratings_list = [5,3,2,1,5]
-
-# rated_songs_dict = {random_songs_list[i]: ratings_list[i] for i in range(len(ratings_list))}
-  
-#no_of_recommendations = 20
-
-
-#recommendations_id_list = recommendSongs(data, rated_songs_dict, no_of_recommendations)
-#recommendations_export = getDataframeFromIDList(data, recommendations_id_list)
