@@ -9,6 +9,8 @@ h1 {
 
 .home-heading{
  color: black;
+ font-family: 'Montserrat', sans-serif;
+ size: 20px;
 }
 
 .App-logo {

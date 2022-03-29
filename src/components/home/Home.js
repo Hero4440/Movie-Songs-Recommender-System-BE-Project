@@ -21,7 +21,7 @@ function Home() {
 
   return (
     <div className="home">
-      <h1 className="home-heading">MultiRater</h1>
+      <h1 className="home-heading">MULTIRATER</h1>
 
       <CContainer>
         <CRow className="align-items-center">
