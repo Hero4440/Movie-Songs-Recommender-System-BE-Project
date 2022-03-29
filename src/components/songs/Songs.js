@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import backv from "../../images/backvid1.mp4";
-import { CIcon } from '@coreui/icons-react';
-import { cifAU } from '@coreui/icons';
+import { CIcon } from "@coreui/icons-react";
+import { cifAU } from "@coreui/icons";
 import {
   CListGroup,
   CButton,
@@ -28,33 +28,26 @@ import {
   CCardText,
 } from "@coreui/react";
 import { useHistory } from "react-router-dom";
-function Moviehome() {
+function Songs() {
   const history = useHistory();
-  const [movies, setMovies] = useState([]);
+  const [songs, setsongs] = useState([]);
   const [visibleXL, setVisibleXL] = useState(false);
-  // modal
-  const [modalData, setModalData] = useState([]);
-  // Use Ref
   const myRef = useRef([]);
   const rateData = [];
   useEffect(() => {
     fetch("/songs_popularity").then((response) =>
       response.json().then((data) => {
         const newData = data.slice(0, 12);
-       
         console.log(newData);
-        setMovies(newData);
+        setsongs(newData);
       })
     );
   }, []);
 
-
   function handleChange(e, bookId) {
-    
     for (let i = 0, len = myRef.current.length; i < len; i++) {
       if (bookId === myRef.current[i]["bookId"]) {
         myRef.current[i]["Rating"] = parseInt(e.target.value);
-        // console.log(myRef.current[i]["Rating"]);
       }
     }
     // console.log(myRef.current);
@@ -83,7 +76,7 @@ function Moviehome() {
         <strong className="me-auto">WARNING</strong>
         <small>exception Occured</small>
       </CToastHeader>
-      <CToastBody>Please Atleast Rate One Movie!!!</CToastBody>
+      <CToastBody>Please Atleast Rate One Song!!!</CToastBody>
     </CToast>
   );
   return (
@@ -96,7 +89,7 @@ function Moviehome() {
       <CListGroup>
         <CContainer>
           <CRow>
-            {movies.map((movie) => {
+            {songs.map((movie) => {
               rateData.push({ bookId: movie[0], Rating: 0 });
               myRef.current = rateData;
               const bookId = movie[0];
@@ -115,32 +108,26 @@ function Moviehome() {
                         {movie[1]}
                       </CCardTitle>
 
-                      <CCardText className="artist-name" >
-                        {movie[2]}
-                      </CCardText>
+                      <CCardText className="artist-name">{movie[2]}</CCardText>
 
                       <div className="release-year">
-                        <CCardText>
-                          {movie[4]}
-                        </CCardText>
+                        <CCardText>{movie[4]}</CCardText>
                       </div>
 
                       <div className="button-card-div song_popularity">
                         <div className="rate_current ">
-                          Popularity{" "}
-                          <CBadge color="danger"> {movie[3]}</CBadge>
+                          Popularity <CBadge color="danger"> {movie[3]}</CBadge>
                         </div>
 
-
-                      
-                        <CButton 
+                        <CButton
                           color="dark"
                           onClick={() => {
                             setVisibleXL(!visibleXL);
-                           
+
                             // setModalData(movie);
                           }}
-                          href={movie[18]} target="_blank"
+                          href={movie[18]}
+                          target="_blank"
                         >
                           Spotify
                         </CButton>
@@ -189,7 +176,7 @@ function Moviehome() {
                     "Content-Type": "application/json",
                   },
                   body: JSON.stringify(rated),
-                })
+                });
                 if (response.ok) {
                   console.log("response worked");
                   history.push("/recommend_song");
@@ -206,37 +193,9 @@ function Moviehome() {
           </CButton>
         </CButtonGroup>
       </div>
-      {/* modal */}
-      {/* <CModal size="xl" visible={visibleXL} onClose={() => setVisibleXL(false)}>
-        <CModalHeader>
-          <CModalTitle>{modalData[2]}</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <div className="modal-flex">
-            <div className="modal-flex-left">
-              <img src={modalData[5]} className="modal-img" alt="" />
-            </div>
-            <div className="modal-flex-right">
-              <CBadge color="primary">{modalData[3]}</CBadge>
-              <span> </span>
-              <CBadge color="danger">{modalData[6]}</CBadge>
-              <CAlert color="primary">
-                <h5>Artist</h5> {modalData[2]}
-              </CAlert>
-              <CAlert color="info">
-                <strong>Release year: </strong>
-                {modalData[4]}
-              </CAlert>
-              
-            </div>
-          </div>
-          <br />
-        </CModalBody>
-      </CModal>
       <CToaster ref={toaster} push={toast} placement="top-end" />
-      end modal */}
     </div>
   );
 }
 
-export default Moviehome;
+export default Songs;

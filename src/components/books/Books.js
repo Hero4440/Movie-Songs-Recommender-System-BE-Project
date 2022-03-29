@@ -25,9 +25,9 @@ import {
   CToastBody,
 } from "@coreui/react";
 import { useHistory } from "react-router-dom";
-function Moviehome() {
+function Books() {
   const history = useHistory();
-  const [movies, setMovies] = useState([]);
+  const [books, setbooks] = useState([]);
   const [visibleXL, setVisibleXL] = useState(false);
   // modal
   const [modalData, setModalData] = useState([]);
@@ -38,17 +38,8 @@ function Moviehome() {
     fetch("/books_votes").then((response) =>
       response.json().then((data) => {
         const newData = data.slice(0, 12);
-        // for (let i = 0, len = newData.length; i < len; i++) {
-        //   // regex
-        //   newData[i][2] = newData[i][2].replace(/['"]+/g, "");
-        //   newData[i][2] = newData[i][2].slice(1, -1);
-        //   newData[i][6] = newData[i][6].replace(/['"]+/g, "");
-        //   newData[i][6] = newData[i][6].slice(1, -1);
-        //   newData[i][5] = newData[i][5].replace(/['"]+/g, "");
-        //   newData[i][5] = newData[i][5].slice(1, -1);
-        // }
         console.log(newData);
-        setMovies(newData);
+        setbooks(newData);
       })
     );
   }, []);
@@ -91,7 +82,7 @@ function Moviehome() {
         <strong className="me-auto">WARNING</strong>
         <small>exception Occured</small>
       </CToastHeader>
-      <CToastBody>Please Atleast Rate One Movie!!!</CToastBody>
+      <CToastBody>Please Atleast Rate One Book!!!</CToastBody>
     </CToast>
   );
   return (
@@ -104,14 +95,14 @@ function Moviehome() {
       <CListGroup>
         <CContainer>
           <CRow>
-            {movies.map((movie) => {
+            {books.map((movie) => {
               rateData.push({ bookId: movie[0], Rating: 0 });
               myRef.current = rateData;
               const bookId = movie[0];
               // console.log(bookId);
               return (
                 <CCol key={bookId}>
-                  <CCard className="movie_card">
+                  <CCard className="book_card">
                     <CCardImage
                       className="movie-cover-img"
                       orientation="top"
@@ -119,9 +110,7 @@ function Moviehome() {
                     />
 
                     <CCardBody className="cards-body">
-                      <CCardTitle className="cards-title">
-                        {movie[1]}
-                      </CCardTitle>
+                      <CCardTitle className="book-title">{movie[1]}</CCardTitle>
                       <div className="button-card-div">
                         <div className="rate_current">
                           Current Rating{" "}
@@ -235,4 +224,4 @@ function Moviehome() {
   );
 }
 
-export default Moviehome;
+export default Books;

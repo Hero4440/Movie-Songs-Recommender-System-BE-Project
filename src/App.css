@@ -7,10 +7,10 @@ h1 {
   font-size: medium;
 }
 
-.home-heading{
- color: black;
- font-family: 'Montserrat', sans-serif;
- size: 20px;
+.home-heading {
+  color: black;
+  font-family: "Montserrat", sans-serif;
+  size: 20px;
 }
 
 .App-logo {
@@ -70,30 +70,40 @@ h1 {
   justify-content: center;
   padding: 0 !important;
   width: 18rem;
-  height: 31rem;
+  height: 32rem;
   margin: 10px 5px 50px 5px;
   border-radius: 10px;
   box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.2), 0 4px 15px 0 rgba(0, 0, 0, 0.19);
 }
-.movie-heading{
+.book_card {
+  display: flex;
+  justify-content: center;
+  padding: 0 !important;
+  width: 18rem;
+  height: 36rem;
+  margin: 10px 5px 50px 5px;
+  border-radius: 10px;
+  box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.2), 0 4px 15px 0 rgba(0, 0, 0, 0.19);
+}
+.book-title {
+  /* margin-bottom: 20px; */
+  color: white;
+  height: 6em;
+}
+.movie-heading {
   display: block;
   color: white;
   background-color: white;
-  
 }
-.song_card{
-
-display: flex;
-justify-content: center;
-padding: 0 !important;
-width: 15rem;
-height: 18rem;
-margin: 10px 5px 50px 5px;
-border-radius: 10px;
-
+.song_card {
+  display: flex;
+  justify-content: center;
+  padding: 0 !important;
+  width: 15rem;
+  height: 18rem;
+  margin: 10px 5px 50px 5px;
+  border-radius: 10px;
 }
-
-
 
 .final_card {
   display: flex;
@@ -141,7 +151,6 @@ border-radius: 10px;
 .cards-body {
   background-color: rgb(7, 6, 6);
   /* background-image: linear-gradient(to bottom right, red, yellow); */
-  
 }
 #customRange2 {
   margin-top: 12px;
@@ -169,23 +178,21 @@ border-radius: 10px;
   width: 100vw;
 }
 
-.artist_name{
+.artist_name {
   color: rgb(255, 255, 255);
   size: 200px;
   background-color: white;
- 
 }
-
 
 .song_cards-body {
   /* background-color: rgb(7, 6, 6); */
-  background-image: linear-gradient(to bottom right,#16222a,#3a6073);
+  background-image: linear-gradient(to bottom right, #16222a, #3a6073);
   /* background-image: linear-gradient(to bottom right,#e6dada,#274046); */
   /* background-image: linear-gradient(to bottom right,#283048,#859398); */
   /* background-image: linear-gradient(to bottom right,#42C2FF,#B8FFF9); */
 }
 
-.release-year{
+.release-year {
   color: white;
 }
 
@@ -193,13 +200,13 @@ border-radius: 10px;
   width: 30px;
  
 } */
-.song_popularity{
+.song_popularity {
   padding-top: 10px;
   padding-bottom: 10px;
   width: 220px;
 }
 
-#artist{
+#artist {
   background-color: red;
- size: 100 px;
+  size: 100 px;
 }
