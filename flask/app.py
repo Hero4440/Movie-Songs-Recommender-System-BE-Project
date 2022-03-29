@@ -73,7 +73,7 @@ def movies():
 @app.route('/movies_votes',methods=['GET'])
 def moviesSortByVoteAverage():
     movies = Movie.readCSVMoviesFrontend()
-    movies_sort_by_votes = movies.sort_values(by='vote_average', ascending=False)
+    movies_sort_by_votes = movies.sort_values(by='vote_average', ascending=False).head(30).sample(20)
     return jsonpify(movies_sort_by_votes.values.tolist())
 
 # POST METHODS
@@ -100,7 +100,7 @@ def books():
 @app.route('/books_votes',methods=['GET'])
 def booksSortByVoteAverage():
     books = Book.readCSVBooks()
-    books_sort_by_votes = books.sort_values(by='Avg-Rating', ascending=False)
+    books_sort_by_votes = books.sort_values(by='Avg-Rating', ascending=False).head(30).sample(20)
     return jsonpify(books_sort_by_votes.values.tolist())
 
 @app.route('/recommendbook',methods=['POST'])
@@ -128,7 +128,7 @@ def songs():
 @app.route('/songs_popularity',methods=['GET'])
 def songsSortByPopularity():
     songs = Song.readCSVSongs()
-    songs_sort_by_votes = songs.sort_values(by='popularity', ascending=False)
+    songs_sort_by_votes = songs.sort_values(by='popularity', ascending=False).head(30).sample(20)
     return jsonpify(songs_sort_by_votes.values.tolist())
 
 @app.route('/recommendsong',methods=['POST'])
