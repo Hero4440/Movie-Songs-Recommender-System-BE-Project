@@ -60,7 +60,7 @@ function Finalmovie() {
               // console.log(bookId);
               return (
                 <CCol key={bookId}>
-                  <CCard className="song_card">
+                  <CCard className="song_card-recommendation">
                     {/* <CCardImage
                     className="movie-cover-img"
                     orientation="top"
@@ -83,23 +83,14 @@ function Finalmovie() {
                           Popularity <CBadge color="danger"> {movie[3]}</CBadge>
                         </div>
 
-                        <CButton
-                          color="success"
-                          onClick={() => {
-                            setVisibleXL(!visibleXL);
-
-                            // setModalData(movie);
-                          }}
-                          href={movie[18]}
-                          target="_blank"
-                        >
+                        <a href={movie[18]} target="blank">
                           <img
                             alt="spotify"
                             className="spotify"
                             orientation="top"
                             src={spotify}
                           />
-                        </CButton>
+                        </a>
                       </div>
                     </CCardBody>
                   </CCard>

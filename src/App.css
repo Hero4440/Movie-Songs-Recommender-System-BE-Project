@@ -18,8 +18,9 @@ h1 {
   pointer-events: none;
 }
 .spotify {
-  height: 100%;
-  width: 32px;
+  padding-left: 24px;
+  height: 40px;
+  width: 100%;
 }
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
@@ -194,7 +195,15 @@ h1 {
   /* background-image: linear-gradient(to bottom right, #283048, #859398); */
   /* background-image: linear-gradient(to bottom right, #42c2ff, #b8fff9); */
 }
-
+.song_card-recommendation {
+  display: flex;
+  justify-content: center;
+  padding: 0 !important;
+  width: 15rem;
+  height: 18rem;
+  margin: 10px 5px 50px 5px;
+  border-radius: 10px;
+}
 .release-year {
   color: white;
 }

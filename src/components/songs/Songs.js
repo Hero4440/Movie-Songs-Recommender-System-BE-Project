@@ -122,24 +122,14 @@ function Moviehome() {
                         <div className="rate_current ">
                           Popularity <CBadge color="danger"> {movie[3]}</CBadge>
                         </div>
-
-                        <CButton
-                          color="success"
-                          onClick={() => {
-                            setVisibleXL(!visibleXL);
-
-                            // setModalData(movie);
-                          }}
-                          href={movie[18]}
-                          target="_blank"
-                        >
+                        <a href={movie[18]} target="blank">
                           <img
                             alt="spotify"
                             className="spotify"
                             orientation="top"
                             src={spotify}
                           />
-                        </CButton>
+                        </a>
                       </div>
                       <CFormRange
                         onChange={(e) => handleChange(e, bookId)}
