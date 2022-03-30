@@ -39,7 +39,7 @@ function Moviehome() {
   useEffect(() => {
     fetch("/songs_popularity").then((response) =>
       response.json().then((data) => {
-        const newData = data.slice(0, 12);
+        const newData = data.slice(0, 16);
 
         console.log(newData);
         setMovies(newData);

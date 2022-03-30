@@ -31,10 +31,10 @@ function Home() {
               <CCardBody className="home-body">
                 <CCardTitle>Movies Recommender</CCardTitle>
                 <CCardText>
-                  I'm not looking for judgement, just a yes or no. Can you
-                  assimilate a giraffe? I'll be with Reuben in my workshop while
-                  you guys are having another day in Phil Collin's proverbial
-                  paradise.
+                {/* CLICK THE BUTTON TO SEE YOUR PICKS. */}
+                {/* ALGORITHMS -  BLAH BLAH BLAH */}
+                {/* We take what you've seen and recommend new titles you actually want to watch */}
+                {/* DATASET - BLAH BLAH BLAH  */}
                 </CCardText>
                 <CButton
                   color="primary"
@@ -53,10 +53,10 @@ function Home() {
               <CCardBody>
                 <CCardTitle>Song Recommender</CCardTitle>
                 <CCardText>
-                  I'm not looking for judgement, just a yes or no. Can you
+                  {/* I'm not looking for judgement, just a yes or no. Can you
                   assimilate a giraffe? I'll be with Reuben in my workshop while
                   you guys are having another day in Phil Collin's proverbial
-                  paradise.
+                  paradise. */}
                 </CCardText>
                 <CButton
                   color="primary"
@@ -75,10 +75,10 @@ function Home() {
               <CCardBody>
                 <CCardTitle>Book Recommender</CCardTitle>
                 <CCardText>
-                  I'm not looking for judgement, just a yes or no. Can you
+                  {/* I'm not looking for judgement, just a yes or no. Can you
                   assimilate a giraffe? I'll be with Reuben in my workshop while
                   you guys are having another day in Phil Collin's proverbial
-                  paradise.
+                  paradise. */}
                 </CCardText>
                 <CButton
                   color="primary"
