@@ -139,7 +139,7 @@ function Moviehome() {
                         id="customRange2"
                       />
                       <CBadge color="warning">
-                        0 <span> to </span> 5
+                        0 <span> - </span> 5
                       </CBadge>
                     </CCardBody>
                   </CCard>
