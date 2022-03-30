@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import backv from "../../images/backvid1.mp4";
+import spotify from "../../images/spotify.png";
 import {
   CListGroup,
   CButton,
@@ -48,6 +49,7 @@ function Finalmovie() {
         <source src={backv} type="video/mp4" />
         Your browser does not support the video tag.
       </video>
+
       <CListGroup>
         <CContainer>
           <CRow>
@@ -60,17 +62,17 @@ function Finalmovie() {
                 <CCol key={bookId}>
                   <CCard className="song_card">
                     {/* <CCardImage
-                      className="movie-cover-img"
-                      orientation="top"
-                      src={movie[5]}
-                    /> */}
+                    className="movie-cover-img"
+                    orientation="top"
+                    src={movie[5]}
+                  /> */}
 
                     <CCardBody className="song_cards-body">
                       <CCardTitle className="cards-title">
                         {movie[1]}
                       </CCardTitle>
 
-                      <CCardText id="artist" className="artist-name">{movie[2]}</CCardText>
+                      <CCardText className="artist-name">{movie[2]}</CCardText>
 
                       <div className="release-year">
                         <CCardText>{movie[4]}</CCardText>
@@ -81,8 +83,22 @@ function Finalmovie() {
                           Popularity <CBadge color="danger"> {movie[3]}</CBadge>
                         </div>
 
-                        <CButton color="dark" href={movie[18]} target="_blank">
-                          Spotify
+                        <CButton
+                          color="success"
+                          onClick={() => {
+                            setVisibleXL(!visibleXL);
+
+                            // setModalData(movie);
+                          }}
+                          href={movie[18]}
+                          target="_blank"
+                        >
+                          <img
+                            alt="spotify"
+                            className="spotify"
+                            orientation="top"
+                            src={spotify}
+                          />
                         </CButton>
                       </div>
                     </CCardBody>
@@ -97,39 +113,44 @@ function Finalmovie() {
       <div className="float-button">
         <CButtonGroup role="group" aria-label="Basic mixed styles example">
           <CButton color="danger" onClick={() => history.push("/")}>
-            Back to Home Page
+            Back
+          </CButton>
+          <CButton
+            color="success"
+            onClick={async () => {
+              // change later
+              let flag = 0;
+              const rated = myRef.current;
+              console.log(rated);
+              for (let i = 0; i < rated.length; i++) {
+                console.log(rated[i].Rating);
+                if (rated[i].Rating !== 0) {
+                  flag = 1;
+                }
+              }
+              if (flag === 1) {
+                const response = await fetch("/recommendsong", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(rated),
+                });
+                if (response.ok) {
+                  console.log("response worked");
+                  history.push("/recommend_song");
+                } else {
+                  console.log("error");
+                }
+              } else {
+                console.log("errrrr");
+              }
+            }}
+          >
+            submit
           </CButton>
         </CButtonGroup>
       </div>
-      {/* modal */}
-      <CModal size="xl" visible={visibleXL} onClose={() => setVisibleXL(false)}>
-        <CModalHeader>
-          <CModalTitle>{modalData[1]}</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <div className="modal-flex">
-            <div className="modal-flex-left">
-              <img src={modalData[15]} className="modal-img" alt="" />
-            </div>
-            <div className="modal-flex-right">
-              <CBadge color="primary">{modalData[2]}</CBadge>
-              <span> </span>
-              <CBadge color="danger">{modalData[7]}</CBadge>
-              <CAlert color="primary">
-                <h5>Cast</h5> {modalData[6]}
-              </CAlert>
-              <CAlert color="info">
-                <strong>Director: </strong>
-                {modalData[5]}
-              </CAlert>
-              <CCallout color="dark">{modalData[4]}</CCallout>
-            </div>
-          </div>
-          <br />
-        </CModalBody>
-      </CModal>
-
-      {/* end modal */}
     </div>
   );
 }

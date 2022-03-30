@@ -17,9 +17,9 @@ h1 {
   height: 40vmin;
   pointer-events: none;
 }
-.spotify{
-height: 100%;
-width: 32px;
+.spotify {
+  height: 100%;
+  width: 32px;
 }
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
@@ -189,10 +189,10 @@ width: 32px;
 
 .song_cards-body {
   /* background-color: rgb(7, 6, 6); */
-  background-image: linear-gradient(to bottom right, #3E5151, #DECBA4);
-  /* background-image: linear-gradient(to bottom right,#e6dada,#274046); */
-  /* background-image: linear-gradient(to bottom right,#283048,#859398); */
-  /* background-image: linear-gradient(to bottom right,#42C2FF,#B8FFF9); */
+  background-image: linear-gradient(to bottom right, #3e5151, #decba4);
+  /* background-image: linear-gradient(to bottom right, #e6dada, #274046); */
+  /* background-image: linear-gradient(to bottom right, #283048, #859398); */
+  /* background-image: linear-gradient(to bottom right, #42c2ff, #b8fff9); */
 }
 
 .release-year {

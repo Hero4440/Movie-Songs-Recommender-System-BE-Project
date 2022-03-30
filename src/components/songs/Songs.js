@@ -40,16 +40,14 @@ function Moviehome() {
     fetch("/songs_popularity").then((response) =>
       response.json().then((data) => {
         const newData = data.slice(0, 12);
-       
+
         console.log(newData);
         setMovies(newData);
       })
     );
   }, []);
 
-
   function handleChange(e, bookId) {
-    
     for (let i = 0, len = myRef.current.length; i < len; i++) {
       if (bookId === myRef.current[i]["bookId"]) {
         myRef.current[i]["Rating"] = parseInt(e.target.value);
@@ -114,34 +112,33 @@ function Moviehome() {
                         {movie[1]}
                       </CCardTitle>
 
-                      <CCardText className="artist-name" >
-                        {movie[2]}
-                      </CCardText>
+                      <CCardText className="artist-name">{movie[2]}</CCardText>
 
                       <div className="release-year">
-                        <CCardText>
-                          {movie[4]}
-                        </CCardText>
+                        <CCardText>{movie[4]}</CCardText>
                       </div>
 
                       <div className="button-card-div song_popularity">
                         <div className="rate_current ">
-                          Popularity{" "}
-                          <CBadge color="danger"> {movie[3]}</CBadge>
+                          Popularity <CBadge color="danger"> {movie[3]}</CBadge>
                         </div>
 
-
-                      
-                        <CButton 
+                        <CButton
                           color="success"
                           onClick={() => {
                             setVisibleXL(!visibleXL);
-                           
+
                             // setModalData(movie);
                           }}
-                          href={movie[18]} target="_blank"
+                          href={movie[18]}
+                          target="_blank"
                         >
-                  <img className="spotify" orientation="top" src={spotify} />
+                          <img
+                            alt="spotify"
+                            className="spotify"
+                            orientation="top"
+                            src={spotify}
+                          />
                         </CButton>
                       </div>
                       <CFormRange
@@ -188,7 +185,7 @@ function Moviehome() {
                     "Content-Type": "application/json",
                   },
                   body: JSON.stringify(rated),
-                })
+                });
                 if (response.ok) {
                   console.log("response worked");
                   history.push("/recommend_song");
@@ -234,6 +231,7 @@ function Moviehome() {
       </CModal>
       <CToaster ref={toaster} push={toast} placement="top-end" />
       end modal */}
+      <CToaster ref={toaster} push={toast} placement="top-end" />
     </div>
   );
 }
