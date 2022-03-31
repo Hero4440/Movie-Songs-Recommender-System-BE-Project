@@ -51,13 +51,16 @@ h1 {
     transform: rotate(360deg);
   }
 }
-
+.main-cards {
+  padding-left: 82px;
+}
 .home {
   background-image: url("./images/backg.jpg");
   background-repeat: repeat;
   height: 150vh;
   background-size: cover;
 }
+
 .home-card {
   margin: 10px;
 }
@@ -166,7 +169,7 @@ h1 {
   margin-right: 15px;
   border-radius: 4px;
   color: black;
-  background-color: #F6FFA4;
+  background-color: #f6ffa4;
 }
 .modal-flex {
   display: flex;
