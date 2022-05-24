@@ -80,9 +80,9 @@ def moviesSortByVoteAverage():
 # filtered list return
 @app.route('/filtered',methods=['GET'])
 def filtered():
-    print(filtered_movies.values.tolist())
+    print(filtered_movies)
     # print(filtered_movies)
-    return jsonpify(filtered_movies.values.tolist())
+    return jsonpify(filtered_movies)
 
 # POST METHODS
 @app.route('/filter',methods=['POST'])
@@ -97,7 +97,8 @@ def filter():
     print(filtered_genres_list)
 
     movies = Movie.readCSVMoviesFrontend()
-    filtered_movies = Movie.getDataframeFromIDList(movies, Movie.findMovieIDbyGenre(movies, filtered_genres_list)).head(30).sample(16)
+    global filtered_movies 
+    filtered_movies = Movie.getDataframeFromIDList(movies, Movie.findMovieIDbyGenre(movies, filtered_genres_list)).head(30).sample(16).values.tolist()
 
     
     return "Done", 201
