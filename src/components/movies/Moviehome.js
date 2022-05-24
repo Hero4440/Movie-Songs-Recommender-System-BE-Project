@@ -70,19 +70,13 @@ function Moviehome() {
   }
   useEffect(() => {
     console.log(filter);
-    const response = fetch("/filter", {
+    fetch("/filter", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ filter }),
     });
-    // if (response.ok) {
-    //   console.log("response worked");
-    //   history.push("/recommend_movie");
-    // } else {
-    //   console.log("error");
-    // }
   }, [filter]);
   async function handlemulFilter(e) {
     const genre = e.target.id;

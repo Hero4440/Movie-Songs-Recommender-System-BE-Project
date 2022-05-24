@@ -76,6 +76,11 @@ def moviesSortByVoteAverage():
     movies_sort_by_votes = movies.sort_values(by='vote_average', ascending=False).head(50).sample(16)
     return jsonpify(movies_sort_by_votes.values.tolist())
 
+# filtered list return
+@app.route('/filtered',methods=['GET'])
+def filtered():
+    return jsonpify(["key"])
+
 # POST METHODS
 @app.route('/filter',methods=['POST'])
 def filter():
