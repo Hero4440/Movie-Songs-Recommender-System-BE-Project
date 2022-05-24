@@ -9,6 +9,7 @@ import Song
 movies_recommend_final = []
 books_recommend_final = []
 songs_recommend_final = []
+filtered_movies = []
 
 def recommendMovieFunction(Rated_data):
 
@@ -79,13 +80,25 @@ def moviesSortByVoteAverage():
 # filtered list return
 @app.route('/filtered',methods=['GET'])
 def filtered():
-    return jsonpify(["key"])
+    print(filtered_movies.values.tolist())
+    return jsonpify(filtered_movies.values.tolist())
 
 # POST METHODS
 @app.route('/filter',methods=['POST'])
 def filter():
     filter = request.get_json()    
-    print(filter)
+    filtered_genres_list = []
+
+    for keys, values in filter['filter'].items():
+        if values==True:
+            filtered_genres_list.append(keys)
+    
+    print(filtered_genres_list)
+
+    movies = Movie.readCSVMoviesFrontend()
+    filtered_movies = Movie.getDataframeFromIDList(movies, Movie.findMovieIDbyGenre(movies, filtered_genres_list)).head(30).sample(16)
+
+    
     return "Done", 201
 
 @app.route('/recommendmovie',methods=['POST'])

@@ -1,5 +1,6 @@
 import pandas as pd
 import random
+import ast
 
 # ------------------------------------------------------------------------------------------------
 # -----------------------------------##Read CSV##-------------------------------------------------
@@ -177,7 +178,22 @@ def recommendContent(movies_list, user_recommendations, movies):
 # ------------------------------------####--------------------------------------------------
 # ------------------------------------------------------------------------------------------------
 
-
+def findMovieIDbyGenre(movies, genre):
+    
+    if type(genre)==str:
+        genre = list([genre])
+    else:
+        pass
+    genres_dict = pd.Series(movies.genres.values,index=movies.id).to_dict()
+    output = []
+    
+    for key, value in genres_dict.items():
+        if(set(genre).issubset(set(ast.literal_eval(value)))):
+            output.append(key)
+    return output
+#----------------------------------------------------------------------------------------------
+def getDataframeFromIDList(movies, id_list):
+    return movies[movies['id'].isin(id_list)]
 
 
 
