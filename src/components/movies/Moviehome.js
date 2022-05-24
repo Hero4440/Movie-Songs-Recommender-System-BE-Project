@@ -23,6 +23,8 @@ import {
   CToast,
   CToastHeader,
   CToastBody,
+  CFormCheck,
+  CFormSelect,
 } from "@coreui/react";
 import { useHistory } from "react-router-dom";
 function Moviehome() {
@@ -31,6 +33,13 @@ function Moviehome() {
   const [visibleXL, setVisibleXL] = useState(false);
   // modal
   const [modalData, setModalData] = useState([]);
+  const [filter, setFilter] = useState({
+    Drama: false,
+    Thriller: false,
+    Comedy: false,
+    Action: false,
+    Crime: false,
+  });
   // Use Ref
   const myRef = useRef([]);
   const rateData = [];
@@ -47,29 +56,48 @@ function Moviehome() {
           newData[i][5] = newData[i][5].replace(/['"]+/g, "");
           newData[i][5] = newData[i][5].slice(1, -1);
         }
-        console.log(newData);
+        // console.log(newData);
         setMovies(newData);
       })
     );
   }, []);
-  console.log(modalData);
-
+  // console.log(modalData);'
+  async function setFilterState(genre, genrevalue) {
+    return await setFilter((prevstate) => ({
+      ...prevstate,
+      [genre]: genrevalue,
+    }));
+  }
+  useEffect(() => {
+    console.log(filter);
+    const response = fetch("/filter", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ filter }),
+    });
+    // if (response.ok) {
+    //   console.log("response worked");
+    //   history.push("/recommend_movie");
+    // } else {
+    //   console.log("error");
+    // }
+  }, [filter]);
+  async function handlemulFilter(e) {
+    const genre = e.target.id;
+    const genrevalue = e.target.checked;
+    setTimeout(() => {
+      return setFilterState(genre, genrevalue);
+    }, 1000);
+  }
   function handleChange(e, movieId) {
-    // console.log(e.target.value);
-    // console.log(myRef.current[0]);
-    // console.log(movieId);
-    // console.log(myRef.current[0]["movieId"]);
     for (let i = 0, len = myRef.current.length; i < len; i++) {
       if (movieId === myRef.current[i]["movieId"]) {
         myRef.current[i]["Rating"] = parseInt(e.target.value);
-        // console.log(myRef.current[i]["Rating"]);
       }
     }
-    // console.log(myRef.current);
   }
-  // function genre(data) {
-  //   return data;
-  // }
 
   // toast
   const [toast, addToast] = useState(0);
@@ -101,7 +129,63 @@ function Moviehome() {
         Your browser does not support the video tag.
       </video>
       <h2 className="movie-heading">Please Rate Your Favorite Movies !!!</h2>
+
       <CListGroup>
+        <div className="filter">
+          {/* <CContainer > */}
+          <CFormCheck
+            inline
+            id="Drama"
+            onChange={(e) => handlemulFilter(e)}
+            label="Drama"
+          />
+          <CFormCheck
+            inline
+            onChange={(e) => handlemulFilter(e)}
+            id="Thriller"
+            label="Thriller"
+          />
+          <CFormCheck
+            inline
+            onChange={(e) => handlemulFilter(e)}
+            id="Comedy"
+            label="Comedy"
+          />
+          <CFormCheck
+            inline
+            onChange={(e) => handlemulFilter(e)}
+            id="Action"
+            label="Action"
+          />
+          <CFormCheck
+            inline
+            onChange={(e) => handlemulFilter(e)}
+            id="Crime"
+            label="Crime"
+          />
+          {/* <option value="0">Please Select a genre to Filter </option>
+              <option value="Drama">Drama</option>
+              <option value="Thriller">Thriller</option>
+              <option value="Comedy">Comedy</option>
+              <option value="Action">Action</option>
+              <option value="Crime">Crime</option>
+              <option value="Adventure">Adventure</option>
+              <option value="Romance">Romance</option>
+              <option value="ScienceFiction">ScienceFiction</option>
+              <option value="Mystery">Mystery</option>
+              <option value="Fantasy">Fantasy</option>
+              <option value="Horror">Horror</option>
+              <option value="Family">Family</option>
+              <option value="History">History</option>
+              <option value="War">War</option>
+              <option value="Animation">Animation</option>
+              <option value="Family">Family</option>
+              <option value="History">History</option>
+              <option value="War">War</option>
+              <option value="Animation">Animation</option> */}
+          {/* </CFormSelect> */}
+        </div>
+        {/* </CContainer> */}
         <CContainer>
           <CRow>
             {movies.map((movie) => {

@@ -71,6 +71,13 @@ h1 {
 /* .home-body {
   background-color: whitesmoke;
 } */
+.filter {
+  width: 50%;
+  margin: auto;
+  padding: 50px;
+  background-color: white;
+  z-index: 2;
+}
 
 .movie_card {
   display: flex;

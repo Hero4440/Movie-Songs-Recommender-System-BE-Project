@@ -77,12 +77,16 @@ def moviesSortByVoteAverage():
     return jsonpify(movies_sort_by_votes.values.tolist())
 
 # POST METHODS
+@app.route('/filter',methods=['POST'])
+def filter():
+    filter = request.get_json()    
+    print(filter)
+    return "Done", 201
+
 @app.route('/recommendmovie',methods=['POST'])
 def recommendmovie():
-    Rated_data = request.get_json()
-    
+    Rated_data = request.get_json()    
     recommendMovieFunction(Rated_data)
-
     return "Done", 201
 
 @app.route('/movie_result',methods=['GET'])
