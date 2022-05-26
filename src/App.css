@@ -75,10 +75,15 @@ h1 {
   width: 50%;
   margin: auto;
   padding: 50px;
-  background-color: white;
+  background-color: whitesmoke;
+  border-radius: 20px;
   z-index: 2;
 }
-
+.filter__button {
+  margin: auto;
+  background-color: grey;
+  z-index: 2;
+}
 .movie_card {
   display: flex;
   justify-content: center;

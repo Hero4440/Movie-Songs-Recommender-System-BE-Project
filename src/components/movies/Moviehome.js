@@ -31,6 +31,8 @@ function Moviehome() {
   const history = useHistory();
   const [movies, setMovies] = useState([]);
   const [visibleXL, setVisibleXL] = useState(false);
+
+  const [hidefliter, setHideFilter] = useState(0);
   // modal
   const [modalData, setModalData] = useState([]);
   const [filter, setFilter] = useState({
@@ -39,6 +41,20 @@ function Moviehome() {
     Comedy: false,
     Action: false,
     Crime: false,
+    Adventure: false,
+    Romance: false,
+    ScienceFiction: false,
+    Mystery: false,
+    Fantasy: false,
+    Horror: false,
+    Family: false,
+    History: false,
+    War: false,
+    Animation: false,
+    Music: false,
+    Western: false,
+    Documentary: false,
+    TVMovie: false,
   });
   // Use Ref
   const myRef = useRef([]);
@@ -142,60 +158,125 @@ function Moviehome() {
       <h2 className="movie-heading">Please Rate Your Favorite Movies !!!</h2>
 
       <CListGroup>
-        <div className="filter">
-          {/* <CContainer > */}
-          <CFormCheck
-            inline
-            id="Drama"
-            onChange={(e) => handlemulFilter(e)}
-            label="Drama"
-          />
-          <CFormCheck
-            inline
-            onChange={(e) => handlemulFilter(e)}
-            id="Thriller"
-            label="Thriller"
-          />
-          <CFormCheck
-            inline
-            onChange={(e) => handlemulFilter(e)}
-            id="Comedy"
-            label="Comedy"
-          />
-          <CFormCheck
-            inline
-            onChange={(e) => handlemulFilter(e)}
-            id="Action"
-            label="Action"
-          />
-          <CFormCheck
-            inline
-            onChange={(e) => handlemulFilter(e)}
-            id="Crime"
-            label="Crime"
-          />
-          {/* <option value="0">Please Select a genre to Filter </option>
-              <option value="Drama">Drama</option>
-              <option value="Thriller">Thriller</option>
-              <option value="Comedy">Comedy</option>
-              <option value="Action">Action</option>
-              <option value="Crime">Crime</option>
-              <option value="Adventure">Adventure</option>
-              <option value="Romance">Romance</option>
-              <option value="ScienceFiction">ScienceFiction</option>
-              <option value="Mystery">Mystery</option>
-              <option value="Fantasy">Fantasy</option>
-              <option value="Horror">Horror</option>
-              <option value="Family">Family</option>
-              <option value="History">History</option>
-              <option value="War">War</option>
-              <option value="Animation">Animation</option>
-              <option value="Family">Family</option>
-              <option value="History">History</option>
-              <option value="War">War</option>
-              <option value="Animation">Animation</option> */}
-          {/* </CFormSelect> */}
-        </div>
+        {hidefliter ? (
+          <>
+            <div className="filter">
+              <h2>Add Filter</h2>
+              {/* <CContainer > */}
+              <CFormCheck
+                inline
+                id="Drama"
+                onChange={(e) => handlemulFilter(e)}
+                label="Drama"
+              />
+              <CFormCheck
+                inline
+                onChange={(e) => handlemulFilter(e)}
+                id="Thriller"
+                label="Thriller"
+              />
+              <CFormCheck
+                inline
+                onChange={(e) => handlemulFilter(e)}
+                id="Comedy"
+                label="Comedy"
+              />
+              <CFormCheck
+                inline
+                onChange={(e) => handlemulFilter(e)}
+                id="Action"
+                label="Action"
+              />
+              <CFormCheck
+                inline
+                onChange={(e) => handlemulFilter(e)}
+                id="Crime"
+                label="Crime"
+              />
+
+              <CFormCheck
+                inline
+                onChange={(e) => handlemulFilter(e)}
+                id="Adventure"
+                label="Adventure"
+                value="Adventure"
+              />
+              <CFormCheck
+                inline
+                onChange={(e) => handlemulFilter(e)}
+                id="Romance"
+                label="Romance"
+                value="Romance"
+              />
+              <CFormCheck
+                inline
+                onChange={(e) => handlemulFilter(e)}
+                id="ScienceFiction"
+                label="ScienceFiction"
+                value="ScienceFiction"
+              />
+              <CFormCheck
+                inline
+                onChange={(e) => handlemulFilter(e)}
+                id="Mystery"
+                label="Mystery"
+                value="Mystery"
+              />
+              <CFormCheck
+                inline
+                onChange={(e) => handlemulFilter(e)}
+                id="Fantasy"
+                label="Fantasy"
+                value="Fantasy"
+              />
+              <CFormCheck
+                inline
+                onChange={(e) => handlemulFilter(e)}
+                id="Horror"
+                label="Horror"
+                value="Horror"
+              />
+              <CFormCheck
+                inline
+                onChange={(e) => handlemulFilter(e)}
+                id="Family"
+                label="Family"
+                value="Family"
+              />
+              <CFormCheck
+                inline
+                onChange={(e) => handlemulFilter(e)}
+                id="History"
+                label="History"
+                value="History"
+              />
+              <CFormCheck
+                inline
+                onChange={(e) => handlemulFilter(e)}
+                id="War"
+                label="War"
+                value="War"
+              />
+              <CFormCheck
+                inline
+                onChange={(e) => handlemulFilter(e)}
+                id="Family"
+                label="Family"
+                value="Family"
+              />
+            </div>
+          </>
+        ) : (
+          <CButton
+            className="filter__button"
+            color="dark"
+            onClick={() => {
+              setHideFilter(!hidefliter);
+            }}
+          >
+            Filter Genre
+          </CButton>
+        )}
         {/* </CContainer> */}
         <CContainer>
           <CRow>
