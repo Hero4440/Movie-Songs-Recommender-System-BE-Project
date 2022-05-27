@@ -104,41 +104,7 @@ function Finalmovie() {
       <div className="float-button">
         <CButtonGroup role="group" aria-label="Basic mixed styles example">
           <CButton color="danger" onClick={() => history.push("/")}>
-            Back
-          </CButton>
-          <CButton
-            color="success"
-            onClick={async () => {
-              // change later
-              let flag = 0;
-              const rated = myRef.current;
-              console.log(rated);
-              for (let i = 0; i < rated.length; i++) {
-                console.log(rated[i].Rating);
-                if (rated[i].Rating !== 0) {
-                  flag = 1;
-                }
-              }
-              if (flag === 1) {
-                const response = await fetch("/recommendsong", {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify(rated),
-                });
-                if (response.ok) {
-                  console.log("response worked");
-                  history.push("/recommend_song");
-                } else {
-                  console.log("error");
-                }
-              } else {
-                console.log("errrrr");
-              }
-            }}
-          >
-            submit
+            Back to home page
           </CButton>
         </CButtonGroup>
       </div>
