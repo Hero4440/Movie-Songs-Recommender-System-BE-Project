@@ -86,30 +86,33 @@ function Moviehome() {
   }
   useEffect(() => {
     console.log(filter);
-    fetch("/filter", {
+    const response = fetch("/filter", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ filter }),
+    }).then((res) => {
+      if (res.ok) {
+        fetch("/filtered").then((response) =>
+          response.json().then((data) => {
+            console.log(data);
+            const newData = data.slice(0, 12);
+            for (let i = 0, len = newData.length; i < len; i++) {
+              // regex
+              newData[i][2] = newData[i][2].replace(/['"]+/g, "");
+              newData[i][2] = newData[i][2].slice(1, -1);
+              newData[i][6] = newData[i][6].replace(/['"]+/g, "");
+              newData[i][6] = newData[i][6].slice(1, -1);
+              newData[i][5] = newData[i][5].replace(/['"]+/g, "");
+              newData[i][5] = newData[i][5].slice(1, -1);
+            }
+            // console.log(newData);
+            setMovies(newData);
+          })
+        );
+      }
     });
-    fetch("/filtered").then((response) =>
-      response.json().then((data) => {
-        console.log(data);
-        const newData = data.slice(0, 12);
-        for (let i = 0, len = newData.length; i < len; i++) {
-          // regex
-          newData[i][2] = newData[i][2].replace(/['"]+/g, "");
-          newData[i][2] = newData[i][2].slice(1, -1);
-          newData[i][6] = newData[i][6].replace(/['"]+/g, "");
-          newData[i][6] = newData[i][6].slice(1, -1);
-          newData[i][5] = newData[i][5].replace(/['"]+/g, "");
-          newData[i][5] = newData[i][5].slice(1, -1);
-        }
-        // console.log(newData);
-        setMovies(newData);
-      })
-    );
   }, [filter]);
   async function handlemulFilter(e) {
     const genre = e.target.id;

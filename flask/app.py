@@ -80,7 +80,7 @@ def moviesSortByVoteAverage():
 # filtered list return
 @app.route('/filtered',methods=['GET'])
 def filtered():
-    print(filtered_movies)
+    # print(filtered_movies)
     # print(filtered_movies)
     return jsonpify(filtered_movies)
 
