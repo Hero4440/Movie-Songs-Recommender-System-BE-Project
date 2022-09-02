@@ -7,10 +7,9 @@ Movie Songs Recommender System
 ● A media recommender that suggests movies, songs & books based on the user’s interest using various algorithms like Cosine Similarity, Pearson and Correlation, KNN, K-Means Clustering and TFIDF
 ● Paper published at IJRASET publication with paper ID- IJRASET42927
 
-- To Do
-- Team Roster
-- Schedule
   <br />
+  git clone the repo
+  inside the Movie-Songs-Recommender-System-BE-Project ```npm install```
   to activate venv
   source venv/Scripts/activate
 
