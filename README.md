@@ -9,14 +9,22 @@ Movie Songs Recommender System
 
   <br />
   #### To Run the project
-  ```
-  git clone https://github.com/Hero4440/Movie-Songs-Recommender-System-BE-Project.git
-  cd Movie-Songs-Recommender-System-BE-Project
-  npm install 
-  cd flask 
-  pip install requirements.txt 
-  flask run 
-  ```
+  <br/>
+  
+  >git clone https://github.com/Hero4440/Movie-Songs-Recommender-System-BE-Project.git 
+  >  <br/>
+  >cd Movie-Songs-Recommender-System-BE-Project
+  >  <br/>
+  >npm install 
+  >  <br/>
+  >cd flask 
+  >  <br/>
+  >pip install requirements.txt 
+  >  <br/>
+  >flask run 
+   
+  
+  <br/>
   to activate venv
   source venv/Scripts/activate
 
