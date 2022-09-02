@@ -7,7 +7,8 @@ Movie Songs Recommender System
 
 ---
 
-### [Google Docs][googledoclink]
+● A media recommender that suggests movies, songs & books based on the user’s interest using various algorithms like Cosine Similarity, Pearson and Correlation, KNN, K-Means Clustering and TFIDF
+● Paper published at IJRASET publication with paper ID- IJRASET42927
 
 - To Do
 - Team Roster
