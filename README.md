@@ -8,8 +8,15 @@ Movie Songs Recommender System
 ● Paper published at IJRASET publication with paper ID- IJRASET42927
 
   <br />
-  git clone the repo
-  inside the Movie-Songs-Recommender-System-BE-Project ```npm install```
+  #### To Run the project
+  ```
+  git clone https://github.com/Hero4440/Movie-Songs-Recommender-System-BE-Project.git
+  cd Movie-Songs-Recommender-System-BE-Project
+  npm install 
+  cd flask 
+  pip install requirements.txt 
+  flask run 
+  ```
   to activate venv
   source venv/Scripts/activate
 
