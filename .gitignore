@@ -1,4 +1,106 @@
-node_modules
+# Node.js / React
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+# package-lock.json
+.npm
+.yarn-integrity
+
+# React Build
+/build
+/dist
+
+# Testing
+/coverage
+*.test.js.snap
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Python
+*.py[cod]
+*$py.class
+*.so
+.Python
+__pycache__/
 *.pyc
-*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+htmlcov/
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
 /flask/venv
+*.egg
+
+# Flask
+instance/
+.webassets-cache
+*.db
+*.sqlite3
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
+.project
+.pydevproject
+.settings/
+*.code-workspace
+
+# OS Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+*~
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Cache
+.cache/
+*.cache
+.parcel-cache
+
+# Optional
+# Uncomment if you don't want to track lock files
+# package-lock.json
+# yarn.lock
+# poetry.lock
+# Pipfile.lock
