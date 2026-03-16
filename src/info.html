@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MULTIRATER — Staff Engineer Interview Prep</title>
+  <style>
+    :root {
+      --bg: #0d0f14;
+      --surface: #161a24;
+      --surface2: #1e2330;
+      --border: #2a3047;
+      --accent: #6c8fff;
+      --accent2: #a78bfa;
+      --accent3: #34d399;
+      --accent4: #fb923c;
+      --accent5: #f472b6;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --dim: #4a5568;
+      --tag-bg: #1e2a4a;
+      --warn: #fbbf24;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: linear-gradient(135deg, #0d1117 0%, #161a24 50%, #0f172a 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 3rem 2rem 2.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(108,143,255,0.08), transparent);
+      pointer-events: none;
+    }
+    .badge-row {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.2rem;
+    }
+    .badge {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 20px;
+      border: 1px solid;
+    }
+    .badge-blue   { color: var(--accent);  border-color: var(--accent);  background: rgba(108,143,255,0.08); }
+    .badge-purple { color: var(--accent2); border-color: var(--accent2); background: rgba(167,139,250,0.08); }
+    .badge-green  { color: var(--accent3); border-color: var(--accent3); background: rgba(52,211,153,0.08);  }
+    .badge-orange { color: var(--accent4); border-color: var(--accent4); background: rgba(251,146,60,0.08);  }
+    .badge-pink   { color: var(--accent5); border-color: var(--accent5); background: rgba(244,114,182,0.08); }
+    .badge-warn   { color: var(--warn);    border-color: var(--warn);    background: rgba(251,191,36,0.08);  }
+
+    header h1 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: linear-gradient(90deg, #fff 30%, var(--accent) 70%, var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+    }
+    header p {
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* ── LAYOUT ── */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+
+    /* ── NAV TABS ── */
+    .nav-tabs {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1rem;
+    }
+    .tab-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+      letter-spacing: 0.02em;
+    }
+    .tab-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .tab-btn.active {
+      background: rgba(108,143,255,0.12);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* ── SECTION ── */
+    .section { display: none; }
+    .section.active { display: block; }
+
+    /* ── PITCH BOX ── */
+    .pitch-box {
+      background: linear-gradient(135deg, rgba(108,143,255,0.06), rgba(167,139,250,0.06));
+      border: 1px solid rgba(108,143,255,0.25);
+      border-radius: 12px;
+      padding: 1.5rem 1.8rem;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+    .pitch-box::before {
+      content: '"';
+      position: absolute;
+      top: -10px;
+      left: 20px;
+      font-size: 5rem;
+      color: var(--accent);
+      opacity: 0.15;
+      line-height: 1;
+      font-family: Georgia, serif;
+    }
+    .pitch-box p { color: var(--text); font-style: italic; }
+
+    /* ── SECTION TITLE ── */
+    .section-title {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: 1rem;
+    }
+
+    /* ── QA CARD ── */
+    .qa-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      overflow: hidden;
+      transition: border-color 0.15s;
+    }
+    .qa-card:hover { border-color: var(--accent); }
+    .qa-question {
+      padding: 1rem 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.8rem;
+      user-select: none;
+    }
+    .qa-question:hover { background: rgba(108,143,255,0.04); }
+    .q-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: rgba(108,143,255,0.15);
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .qa-question strong {
+      flex: 1;
+      font-size: 0.95rem;
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .chevron {
+      color: var(--dim);
+      font-size: 0.75rem;
+      transition: transform 0.2s;
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
+    .qa-card.open .chevron { transform: rotate(180deg); }
+    .qa-answer {
+      display: none;
+      padding: 0 1.2rem 1.2rem 3.2rem;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+    .qa-card.open .qa-answer { display: block; }
+    .qa-answer p { margin-bottom: 0.7rem; }
+    .qa-answer p:last-child { margin-bottom: 0; }
+    .qa-answer ul, .qa-answer ol {
+      padding-left: 1.4rem;
+      margin: 0.4rem 0 0.7rem;
+    }
+    .qa-answer li { margin-bottom: 0.35rem; }
+
+    /* ── INLINE HIGHLIGHT ── */
+    .hl       { color: var(--accent);  font-weight: 600; }
+    .hl-green { color: var(--accent3); font-weight: 600; }
+    .hl-orange{ color: var(--accent4); font-weight: 600; }
+    .hl-pink  { color: var(--accent5); font-weight: 600; }
+    .hl-warn  { color: var(--warn);    font-weight: 600; }
+
+    /* ── CODE ── */
+    code {
+      font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+      font-size: 0.82rem;
+      background: rgba(108,143,255,0.1);
+      color: var(--accent);
+      padding: 1px 6px;
+      border-radius: 4px;
+    }
+    pre {
+      background: #0b0d12;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.2rem;
+      overflow-x: auto;
+      font-size: 0.82rem;
+      font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+      color: #a9c7ff;
+      margin: 0.6rem 0;
+      line-height: 1.6;
+    }
+    pre .keyword { color: #c792ea; }
+    pre .string  { color: #c3e88d; }
+    pre .comment { color: #546e7a; font-style: italic; }
+    pre .fn      { color: #82aaff; }
+    pre .num     { color: #f78c6c; }
+
+    /* ── CALLOUT ── */
+    .callout {
+      border-left: 3px solid;
+      border-radius: 0 8px 8px 0;
+      padding: 0.8rem 1rem;
+      margin: 0.8rem 0;
+      font-size: 0.88rem;
+    }
+    .callout-blue   { border-color: var(--accent);  background: rgba(108,143,255,0.06); color: var(--muted); }
+    .callout-green  { border-color: var(--accent3); background: rgba(52,211,153,0.06);  color: var(--muted); }
+    .callout-orange { border-color: var(--accent4); background: rgba(251,146,60,0.06);  color: var(--muted); }
+    .callout-warn   { border-color: var(--warn);    background: rgba(251,191,36,0.06);  color: var(--muted); }
+    .callout strong { display: block; margin-bottom: 0.3rem; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.07em; }
+    .callout-blue   strong { color: var(--accent);  }
+    .callout-green  strong { color: var(--accent3); }
+    .callout-orange strong { color: var(--accent4); }
+    .callout-warn   strong { color: var(--warn);    }
+
+    /* ── ARCH DIAGRAM ── */
+    .arch-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .arch-box {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+    }
+    .arch-box .arch-icon { font-size: 1.8rem; margin-bottom: 0.5rem; }
+    .arch-box h4 { font-size: 0.85rem; font-weight: 700; margin-bottom: 0.3rem; }
+    .arch-box p  { font-size: 0.78rem; color: var(--muted); }
+    .arch-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--dim);
+      font-size: 1.2rem;
+    }
+
+    /* ── TABLE ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      margin: 0.8rem 0;
+    }
+    thead tr { border-bottom: 1px solid var(--border); }
+    thead th {
+      text-align: left;
+      padding: 8px 10px;
+      color: var(--dim);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    tbody tr { border-bottom: 1px solid rgba(42,48,71,0.5); }
+    tbody tr:hover { background: rgba(255,255,255,0.02); }
+    tbody td { padding: 8px 10px; color: var(--muted); }
+    tbody td:first-child { color: var(--text); font-weight: 500; }
+
+    /* ── QUICK REF ── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 0.8rem;
+      margin: 1rem 0;
+    }
+    .stat-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+    }
+    .stat-card .stat-num {
+      font-size: 1.6rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.2;
+    }
+    .stat-card .stat-label {
+      font-size: 0.72rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-top: 0.3rem;
+    }
+
+    /* ── ALGO CARD ── */
+    .algo-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      overflow: hidden;
+    }
+    .algo-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.2rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .algo-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .algo-header h3 { font-size: 0.95rem; font-weight: 700; }
+    .algo-header .algo-sub { color: var(--muted); font-size: 0.78rem; margin-left: auto; }
+    .algo-body { padding: 1rem 1.2rem; font-size: 0.88rem; color: var(--muted); }
+    .algo-body p { margin-bottom: 0.5rem; }
+    .algo-step {
+      display: flex;
+      gap: 0.8rem;
+      align-items: flex-start;
+      margin-bottom: 0.6rem;
+    }
+    .step-num {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      font-size: 0.68rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: var(--accent);
+      margin-top: 2px;
+    }
+
+    /* ── TRADEOFF ── */
+    .tradeoff {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem;
+      margin: 0.6rem 0;
+    }
+    .tradeoff-col {
+      background: var(--surface2);
+      border-radius: 8px;
+      padding: 0.8rem 1rem;
+      font-size: 0.82rem;
+    }
+    .tradeoff-col h5 {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.5rem;
+    }
+    .pro  h5 { color: var(--accent3); }
+    .con  h5 { color: var(--accent4); }
+    .tradeoff-col ul { padding-left: 1rem; color: var(--muted); }
+    .tradeoff-col li { margin-bottom: 0.25rem; }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid var(--border);
+      color: var(--dim);
+      font-size: 0.8rem;
+    }
+
+    /* ── EXPAND ALL ── */
+    .expand-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 12px;
+      padding: 4px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-bottom: 1rem;
+      transition: all 0.15s;
+    }
+    .expand-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    @media (max-width: 640px) {
+      header { padding: 2rem 1rem 1.5rem; }
+      .tradeoff { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="badge-row">
+    <span class="badge badge-blue">React 17</span>
+    <span class="badge badge-purple">Flask</span>
+    <span class="badge badge-green">scikit-learn</span>
+    <span class="badge badge-orange">pandas</span>
+    <span class="badge badge-pink">Published — IJRASET</span>
+    <span class="badge badge-warn">Staff Engineer Prep</span>
+  </div>
+  <h1>MULTIRATER — Interview Prep</h1>
+  <p>A complete guide to discussing this project for a Staff Engineer role. Know it inside out.</p>
+</header>
+
+<div class="container">
+
+  <!-- NAV -->
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="switchTab('overview')">Overview</button>
+    <button class="tab-btn" onclick="switchTab('architecture')">Architecture</button>
+    <button class="tab-btn" onclick="switchTab('algorithms')">Algorithms</button>
+    <button class="tab-btn" onclick="switchTab('frontend')">Frontend</button>
+    <button class="tab-btn" onclick="switchTab('scale')">Scalability</button>
+    <button class="tab-btn" onclick="switchTab('data')">Data & ML</button>
+    <button class="tab-btn" onclick="switchTab('antipatterns')">Anti-patterns</button>
+    <button class="tab-btn" onclick="switchTab('quickref')">Quick Ref</button>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       OVERVIEW
+  ══════════════════════════════════════════════ -->
+  <div class="section active" id="tab-overview">
+
+    <div class="section-title">2-Minute Pitch</div>
+    <div class="pitch-box">
+      <p>MULTIRATER is a hybrid media recommendation system I built as my final year BE project, which was published in IJRASET (Paper ID: IJRASET42927). It recommends movies, songs, and books using different ML algorithms tailored to each domain — collaborative filtering for movies and books, audio-feature-based KNN for songs. The stack is React 17 + Flask with pre-processed CSV datasets. The core insight of the project is that different content types benefit from fundamentally different recommendation strategies, and applying one-size-fits-all algorithms produces inferior results.</p>
+    </div>
+
+    <div class="section-title" style="margin-top:1.5rem">General Questions</div>
+    <button class="expand-btn" onclick="expandAll('tab-overview')">Expand All</button>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">Q</div>
+        <strong>What is MULTIRATER and what problem does it solve?</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <p>MULTIRATER is a <span class="hl">multi-domain media recommender</span> — it recommends movies, songs, and books from a single unified interface. The user rates a few items they know, and the system generates personalized recommendations.</p>
+        <p>The problem it solves is <span class="hl-green">cold-start personalization</span>: rather than requiring a long history, the user just rates 1-5 items they already know and gets meaningful recommendations immediately. This is especially practical for a demo or proof-of-concept system.</p>
+      </div>
+    </div>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">Q</div>
+        <strong>Why did you use different algorithms per domain?</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <p>This was the <span class="hl">core intellectual contribution</span> of the project. The data characteristics differ fundamentally per domain:</p>
+        <ul>
+          <li><span class="hl">Movies</span> — Rich metadata (genres, cast, director, keywords, overview) <em>plus</em> dense user rating data (MovieLens). A hybrid approach combines both signals.</li>
+          <li><span class="hl-green">Songs</span> — Spotify provides 12 objective numeric audio features (danceability, energy, valence, tempo, etc.) but <em>no user ratings</em> in our dataset. Feature-based nearest neighbor is the natural fit.</li>
+          <li><span class="hl-orange">Books</span> — Limited metadata, but rich user rating data (~30K Amazon users). Pure collaborative filtering (KNN on user-rating matrix) works best here.</li>
+        </ul>
+        <p>Applying collaborative filtering to songs would fail because there's no rating data. Applying pure content-based to books would fail because text metadata alone is a poor predictor of taste. Matching the algorithm to the data type is the right engineering decision.</p>
+      </div>
+    </div>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">Q</div>
+        <strong>Walk me through the user flow end-to-end.</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <ol>
+          <li>User lands on <code>/</code> (Home) — picks a category: Movies, Songs, or Books.</li>
+          <li>The category page loads 16 randomly-sampled top-rated items from the backend (<code>GET /movies_votes</code>, etc.).</li>
+          <li>User rates known items using sliders (0–5). Ratings are stored in a <code>useRef</code> array — no re-renders.</li>
+          <li>User clicks "Submit" → frontend validates at least one item is rated, then <code>POST /recommendmovie</code> with the ratings array.</li>
+          <li>Backend computes recommendations, stores in a global variable, returns <code>201</code>.</li>
+          <li>Frontend navigates to the results page, immediately <code>GET /movie_result</code>.</li>
+          <li>Up to 12 recommendations are displayed as cards.</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">Q</div>
+        <strong>What was published in IJRASET and what was the research contribution?</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <p>Paper ID <span class="hl">IJRASET42927</span> in the International Journal for Research in Applied Science and Engineering Technology.</p>
+        <p>The research contribution was demonstrating that <span class="hl-green">domain-specific algorithm selection outperforms a generic recommendation approach</span> when building a multi-domain system. We evaluated all three recommenders manually and showed that the hybrid movie recommender benefited from the ensemble combination of content-based methods (intersection-first strategy), while songs and books were best served by purely feature-based and collaborative approaches respectively.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       ARCHITECTURE
+  ══════════════════════════════════════════════ -->
+  <div class="section" id="tab-architecture">
+
+    <div class="section-title">System Architecture</div>
+    <div class="arch-grid" style="grid-template-columns: 1fr 40px 1fr 40px 1fr; align-items: center; margin-bottom:1.5rem;">
+      <div class="arch-box">
+        <div class="arch-icon">⚛️</div>
+        <h4>React 17 SPA</h4>
+        <p>localhost:3000<br>CRA + React Router v5<br>CoreUI components</p>
+      </div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-box">
+        <div class="arch-icon">🐍</div>
+        <h4>Flask REST API</h4>
+        <p>localhost:5000<br>9 endpoints<br>No auth, no DB</p>
+      </div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-box">
+        <div class="arch-icon">📊</div>
+        <h4>CSV Datasets</h4>
+        <p>Loaded into pandas<br>DataFrames at startup<br>Static, no updates</p>
+      </div>
+    </div>
+
+    <button class="expand-btn" onclick="expandAll('tab-architecture')">Expand All</button>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">Q</div>
+        <strong>Walk me through the system architecture.</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <p>Classic two-tier architecture: React SPA frontend + Flask REST API backend. Deliberately minimal — no database, no auth, no caching layer. All data is pre-processed CSV files loaded at startup into pandas DataFrames.</p>
+        <p>The frontend proxies all API calls to Flask via CRA's <code>"proxy": "http://localhost:5000/"</code> in <code>package.json</code>, which eliminates CORS in development without requiring <code>flask-cors</code>.</p>
+        <p>The interesting architectural piece is the <span class="hl">two-step recommendation pattern</span>: client POSTs ratings to trigger computation, gets back a <code>201</code>, then GETs the results. Results are held in module-level Python globals between those two calls.</p>
+      </div>
+    </div>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">Q</div>
+        <strong>Why no database? Why CSV files?</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <p>The datasets are <span class="hl">static</span> — 1,496 movies, 8,010 songs, 727 books. They don't change. Using pandas DataFrames loaded from CSVs at startup gives fast in-memory querying without ORM overhead.</p>
+        <div class="tradeoff">
+          <div class="tradeoff-col pro"><h5>Why it works here</h5><ul><li>Zero setup — no DB server needed</li><li>Fast in-memory queries via pandas</li><li>Portable — clone and run</li><li>Appropriate for static data</li></ul></div>
+          <div class="tradeoff-col con"><h5>Production trade-offs</h5><ul><li>Re-reads disk on every request</li><li>No online updates / learning</li><li>Doesn't scale horizontally</li><li>No query indexing</li></ul></div>
+        </div>
+        <div class="callout callout-blue">
+          <strong>At Scale</strong>
+          PostgreSQL for catalog, Redis for recommendation caching, a vector DB (Pinecone/FAISS) for embedding lookups.
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">Q</div>
+        <strong>Why Flask over Django or FastAPI?</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <p>Flask was the right choice here — minimal boilerplate, fast to prototype, and the project only needed <span class="hl">9 endpoints</span>. Django would have been overkill (ORM, admin panel, migrations — none needed). FastAPI would have been a better production choice today (async support, built-in OpenAPI docs, Pydantic validation), but at the time Flask was more accessible for the team.</p>
+        <p>If I rewrote it today: <span class="hl-green">FastAPI</span> with Pydantic models for request/response validation and auto-generated OpenAPI docs.</p>
+      </div>
+    </div>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">Q</div>
+        <strong>Why are there two CSV files for movies (movies4 and movies5)?</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <p>This is a <span class="hl">deliberate separation of concerns</span>. The <code>movies4_1496.csv</code> file is the "presentation" dataset — clean display fields (title, poster URL, cast, genres). The <code>movies5_1496.csv</code> file adds a <code>tags</code> column, which is a pre-processed NLP artifact.</p>
+        <p>The <code>tags</code> field is a concatenation of: genres, keywords, overview words, cast names (no spaces to treat "Tom Hanks" as one token), director, and production companies — all lowercased. Sending this to the frontend would be wasteful payload, and it should never leave the backend since it's an internal ML feature.</p>
+        <p>The separation enforces <span class="hl-green">the principle that ML feature engineering artifacts don't leak into the presentation layer</span>.</p>
+      </div>
+    </div>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">Q</div>
+        <strong>Why use jsonpify instead of jsonify?</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <p><code>flask_jsonpify</code> is a legacy CORS workaround — it wraps responses in a JavaScript callback for JSONP. This was <span class="hl-warn">unnecessary</span> given the <code>proxy</code> in <code>package.json</code>.</p>
+        <p>The fact that both exist suggests the proxy was added <em>after</em> the backend was built. This is technical debt — all responses should use <code>jsonify</code> from Flask directly, and <code>flask_jsonpify</code> should be removed from dependencies.</p>
+      </div>
+    </div>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">Q</div>
+        <strong>Describe the startup and deployment setup.</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <p>I wrote cross-platform <code>start.sh</code> / <code>stop.sh</code> bash scripts. <code>start.sh</code>:</p>
+        <ol>
+          <li>Detects OS (macOS / Windows / Linux)</li>
+          <li>Checks and installs npm packages (<code>npm install</code>) and Python venv + pip requirements</li>
+          <li>Launches two terminal tabs — one for <code>npm start</code> (React on :3000), one for <code>python3 -m flask run</code> (Flask on :5000)</li>
+          <li>Supports iTerm2, Terminal.app, Windows Terminal, gnome-terminal, xterm</li>
+        </ol>
+        <p><code>stop.sh</code> kills processes on ports 3000 and 5000 using <code>lsof</code> on macOS/Linux or <code>netstat</code>/<code>taskkill</code> on Windows.</p>
+        <div class="callout callout-blue">
+          <strong>Modern Alternative</strong>
+          Docker Compose with two services (node, python) would be more reproducible and eliminate OS detection complexity.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       ALGORITHMS
+  ══════════════════════════════════════════════ -->
+  <div class="section" id="tab-algorithms">
+
+    <div class="section-title">Recommendation Algorithms</div>
+
+    <div class="algo-card">
+      <div class="algo-header">
+        <div class="algo-dot" style="background: var(--accent);"></div>
+        <h3>Movies — Hybrid (Collaborative + Content-Based)</h3>
+        <span class="algo-sub">Movie.py</span>
+      </div>
+      <div class="algo-body">
+        <div class="algo-step">
+          <div class="step-num">1</div>
+          <p><strong style="color:var(--text)">Collaborative Filtering (Pearson Correlation):</strong> Pre-computed 1,496×1,496 correlation matrix. For each rated movie, multiplies its correlation vector by <code>(rating - 2.5)</code>. The 2.5 offset means ratings above midpoint add positive signal, below add negative signal. Sum all weighted vectors, sort, exclude rated movies → collab candidate IDs.</p>
+        </div>
+        <div class="algo-step">
+          <div class="step-num">2</div>
+          <p><strong style="color:var(--text)">Content-Based — Dual method (only for rating ≥ 3):</strong></p>
+        </div>
+        <div style="padding-left:2rem; margin-bottom:0.6rem; font-size:0.85rem; color:var(--muted);">
+          <p>• <strong style="color:var(--text)">CountVectorizer + Cosine Similarity</strong>: Bag-of-words on <code>tags</code> column, <code>max_features=1000</code>, <code>stop_words='english'</code></p>
+          <p>• <strong style="color:var(--text)">TF-IDF + Sigmoid Kernel</strong>: <code>TfidfVectorizer(min_df=3)</code> on <code>tags</code>, sigmoid kernel similarity matrix</p>
+          <p>• Take <span class="hl">intersection first</span> (both methods agree) → fill from <span class="hl-green">union</span> if needed. Sort by <code>vote_average</code>.</p>
+        </div>
+        <div class="algo-step">
+          <div class="step-num">3</div>
+          <p><strong style="color:var(--text)">Merge:</strong> Combine collab IDs + content IDs, filter from full dataframe, sort by <code>vote_average</code> descending. Return up to 12 movies.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="algo-card">
+      <div class="algo-header">
+        <div class="algo-dot" style="background: var(--accent3);"></div>
+        <h3>Songs — Feature-Based Manhattan Distance KNN</h3>
+        <span class="algo-sub">Song.py</span>
+      </div>
+      <div class="algo-body">
+        <div class="algo-step">
+          <div class="step-num">1</div>
+          <p>For each song rated ≥ 3, calls <code>recommendOneSong()</code></p>
+        </div>
+        <div class="algo-step">
+          <div class="step-num">2</div>
+          <p>For every candidate song (all 8,010), computes <span class="hl-green">Manhattan distance</span> across 12 Spotify audio features: <code>duration_ms, acousticness, danceability, energy, instrumentalness, key, liveness, loudness, mode, speechiness, tempo, valence</code></p>
+        </div>
+        <div class="algo-step">
+          <div class="step-num">3</div>
+          <p>Sort by distance ascending, deduplicate on Spotify URL, return top 21 candidates per input song. Take first 21 IDs across all recommendations.</p>
+        </div>
+        <div class="callout callout-warn">
+          <strong>Known Limitation</strong>
+          Pure Python loop over 8,010 songs — O(n) per query. Features are not normalized. A song with high <code>duration_ms</code> (~200,000) dominates the distance vs. features with range 0–1.
+        </div>
+      </div>
+    </div>
+
+    <div class="algo-card">
+      <div class="algo-header">
+        <div class="algo-dot" style="background: var(--accent4);"></div>
+        <h3>Books — Collaborative Filtering (KNN + Cosine Similarity)</h3>
+        <span class="algo-sub">Book.py</span>
+      </div>
+      <div class="algo-body">
+        <div class="algo-step">
+          <div class="step-num">1</div>
+          <p>Uses a <span class="hl-orange">673 books × ~29,783 users pivot table</span> where values are user ratings (sparse CSR matrix).</p>
+        </div>
+        <div class="algo-step">
+          <div class="step-num">2</div>
+          <p>For each book rated ≥ 3: look up its row in the pivot table, run it through <code>NearestNeighbors(metric='cosine', algorithm='brute')</code> to find K most similar books by rating pattern.</p>
+        </div>
+        <div class="algo-step">
+          <div class="step-num">3</div>
+          <p>Collect all neighbor titles, deduplicate (keep first), sort by <code>Avg-Rating</code> descending → return top 12.</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:1.5rem"></div>
+    <button class="expand-btn" onclick="expandAll('tab-algorithms')">Expand All Q&A</button>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">Q</div>
+        <strong>Why pre-compute the movie correlation matrix instead of computing at runtime?</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <p>The matrix is 1,496 × 1,496 = ~2.24 million values. Computing pairwise correlations from raw user-rating data at query time would be <span class="hl-warn">O(n²) per request</span>. Pre-computing it offline and serializing to CSV makes query time <span class="hl-green">O(n)</span> — just a lookup and weighted sum.</p>
+        <p>The trade-off: the matrix is static and doesn't incorporate new user feedback. For production, you'd rebuild it periodically via a batch job, or use approximate nearest neighbor (ANN) methods like FAISS for sub-linear search at scale.</p>
+      </div>
+    </div>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">Q</div>
+        <strong>Why the intersection-first strategy for combining two content-based methods?</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <p>This is an <span class="hl">ensemble agreement strategy</span>. Two independently-computed representations of the same content (bag-of-words vs TF-IDF + sigmoid kernel) will naturally disagree on edge cases. Items that <em>both</em> methods rank highly are more likely to be genuinely similar to the query, not just an artifact of one method's biases.</p>
+        <p>Concretely: if CountVectorizer + cosine similarity recommends [A, B, C, D] and TF-IDF + sigmoid recommends [B, C, E, F], the intersection {B, C} are the "confident" recommendations. The union {A, B, C, D, E, F} minus intersection gives the "uncertain" ones used as backfill.</p>
+        <p>This is analogous to <span class="hl-green">model ensemble voting</span> — agree on the output, not just the average. It's a conservative strategy that tends to produce fewer but higher-confidence recommendations.</p>
+      </div>
+    </div>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">Q</div>
+        <strong>Why Manhattan distance for songs? Why not Euclidean or Cosine?</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <p>Manhattan distance is less sensitive to outliers in any single dimension than Euclidean. When features have very different scales (<code>duration_ms</code> ~200,000 vs <code>valence</code> 0–1), Euclidean distance would be dominated by the high-scale features. Manhattan reduces that domination somewhat — each dimension contributes its absolute difference rather than its squared difference.</p>
+        <p>Cosine similarity measures <span class="hl-orange">directional similarity</span> — good for sparse high-dimensional text vectors. For dense numeric audio features where magnitude matters (a song with high energy is meaningfully different from a low-energy song), cosine distance is less appropriate.</p>
+        <div class="callout callout-warn">
+          <strong>Honest Reflection</strong>
+          The right fix is feature normalization (z-score or min-max) before computing any distance metric. Without it, <code>duration_ms</code> dominates the distance regardless of which metric is used. This is a known limitation.
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">Q</div>
+        <strong>What is the dead KMeans code in Song.py? Why is it there?</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <p>That's the <code>addFeaturesColumn()</code> function — vestigial code from an earlier iteration. The original design was to pre-cluster songs into 10 KMeans clusters by audio features, then only compute distances within the same cluster. This was a <span class="hl">pruning strategy</span>: instead of comparing against all 8,010 songs, only compare against ~800 in the same cluster — ~10x speedup.</p>
+        <p>I moved away from it because cluster boundaries created false negatives: a song on the edge of cluster 3 might have its nearest neighbor in cluster 4, which would be completely missed. The brute-force O(n) loop was fast enough for 8,010 items and more correct.</p>
+        <div class="callout callout-orange">
+          <strong>What I'd do today</strong>
+          Use sklearn's <code>NearestNeighbors(metric='manhattan', algorithm='ball_tree')</code> or numpy vectorization: <code>np.sum(np.abs(features - query), axis=1)</code> — ~100x faster than the Python loop.
+        </div>
+        <p>I should have deleted the dead code before submission — this would fail a code review.</p>
+      </div>
+    </div>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">Q</div>
+        <strong>Why does the (rating - 2.5) weighting work for collaborative filtering?</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <p>This is the <span class="hl">mean-centered rating trick</span> from classical collaborative filtering. The idea:</p>
+        <ul>
+          <li>Rating <strong>5</strong>: weight = +2.5 (strong positive signal — strongly recommend similar items)</li>
+          <li>Rating <strong>4</strong>: weight = +1.5 (moderate positive signal)</li>
+          <li>Rating <strong>2.5</strong>: weight = 0 (neutral — no signal in either direction)</li>
+          <li>Rating <strong>1</strong>: weight = -1.5 (mild negative signal)</li>
+          <li>Rating <strong>0</strong>: weight = -2.5 (strong negative signal)</li>
+        </ul>
+        <p>By multiplying a movie's correlation vector by this weight and summing across all rated movies, high-rated movies push their correlated neighbors up the recommendation list while low-rated movies push them down. It's a simple but effective way to encode preference direction into a similarity-based lookup.</p>
+      </div>
+    </div>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">Q</div>
+        <strong>Why does the rating threshold for recommendations start at 3/5?</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <p>Only items rated ≥ 3 are used as seeds for content-based and book/song recommendations. The reasoning: if a user rates a movie 1/5, we don't know <em>why</em> they disliked it. Genre aversion? Bad experience? Random noise? Using low-rated items as negative examples without understanding the reason can degrade recommendation quality.</p>
+        <p>This is a <span class="hl-warn">limitation</span>: we lose negative signal. A sophisticated system (YouTube's "not interested," Spotify's thumbs-down) uses explicit negative feedback with specific weighting. For this prototype, ignoring low-rated items was the conservative safe default.</p>
+        <p>Note: the collaborative filtering step <em>does</em> use all ratings via the <code>(rating - 2.5)</code> weighting — so low ratings do have negative influence there. The threshold only applies to the content-based seeding.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       FRONTEND
+  ══════════════════════════════════════════════ -->
+  <div class="section" id="tab-frontend">
+
+    <div class="section-title">Frontend Design Decisions</div>
+    <button class="expand-btn" onclick="expandAll('tab-frontend')">Expand All</button>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">Q</div>
+        <strong>Why useRef instead of useState for storing ratings?</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <p>When a user moves a slider, <code>useState</code> would trigger a re-render for the entire list of 16 movie cards — that's unnecessary DOM work. Using <code>useRef</code> means the slider value is stored as a mutable ref (via a ref array indexed by movie ID) without causing re-renders.</p>
+        <p>We only need the rating values at one moment: when the user clicks "Submit." We don't need React to track them reactively between changes. This is a classic case where <span class="hl">ref is semantically correct</span> — it's not state that the UI needs to react to, it's imperative data we hold onto and read later.</p>
+        <div class="callout callout-orange">
+          <strong>Trade-off</strong>
+          You lose reactivity. If you wanted a live counter ("You've rated 3 of 16 items"), you'd need state. For our submit-only use case, ref is the right call.
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">Q</div>
+        <strong>Why React Router v5 instead of v6?</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <p>Built in 2022 when React Router v5 was the stable production choice. v6 had just released with significant breaking API changes: <code>Switch</code> → <code>Routes</code>, <code>component={}</code> → <code>element={}</code>, <code>useHistory</code> → <code>useNavigate</code>. For a student project on a fixed timeline, staying on the version we knew well was the pragmatic call.</p>
+        <p>In a production project today, I'd use v6 or Next.js App Router with file-system based routing.</p>
+      </div>
+    </div>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">Q</div>
+        <strong>Why did you use the CRA proxy instead of setting up CORS on Flask?</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <p>The CRA proxy makes all API calls appear same-origin from the browser's perspective — no CORS headers needed. The alternative, <code>flask-cors</code>, works but requires careful configuration (wildcard origins are a security risk in production, specific origins need updating per environment).</p>
+        <p>The proxy is a dev-only convenience. In production, you'd put both services behind nginx: <code>/api/*</code> → Flask, everything else → React static files. Same-origin, no CORS config needed.</p>
+      </div>
+    </div>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">Q</div>
+        <strong>How does the genre filter work? Walk me through the implementation.</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <p>The filter is a controlled state object (e.g. <code>{ Drama: true, Thriller: false, ... }</code>) toggled by checkboxes. A <code>useEffect</code> watches the <code>filter</code> state with a <span class="hl">1-second debounce</span> via <code>setTimeout</code>:</p>
+        <pre><span class="keyword">useEffect</span>(() => {
+  <span class="keyword">const</span> timer = <span class="fn">setTimeout</span>(() => {
+    <span class="comment">// POST /filter with genre object</span>
+    <span class="comment">// then GET /filtered → update displayed movies</span>
+  }, <span class="num">1000</span>);
+  <span class="keyword">return</span> () => <span class="fn">clearTimeout</span>(timer); <span class="comment">// cleanup</span>
+}, [filter]);</pre>
+        <p>The debounce prevents a flood of API calls while the user is toggling multiple checkboxes. It waits for 1 second of inactivity before firing.</p>
+        <div class="callout callout-warn">
+          <strong>Design Flaw</strong>
+          Filtering is a read operation — it should be <code>GET /movies?genres=Drama,Thriller</code> with query params, not a POST that mutates global server state. The current design is a REST anti-pattern.
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">Q</div>
+        <strong>Why CoreUI? What did it provide?</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <p>CoreUI provided ready-made components that fit the project's card-heavy UI: <code>CCard</code>, <code>CModal</code>, <code>CBadge</code>, <code>CToast</code>, <code>CFormRange</code>. This let us focus on ML logic rather than building UI primitives from scratch.</p>
+        <p>The main components used:</p>
+        <ul>
+          <li><code>CFormRange</code> — the rating sliders (0–5)</li>
+          <li><code>CModal</code> (XL) — movie/book detail views with poster, cast, overview</li>
+          <li><code>CBadge</code> — genre and date tags on movie cards</li>
+          <li><code>CToast</code> — warning when user hasn't rated anything before submitting</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">Q</div>
+        <strong>Why does the songs page show Spotify links but movies don't have a direct watch link?</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <p>The Spotify dataset includes a direct <code>url</code> field (column index 18) pointing to the Spotify track. The Spotify icon link on each song card opens this URL directly — it's free data from the dataset.</p>
+        <p>Movies don't have streaming links because the TMDB/MovieLens dataset doesn't include them — streaming rights vary by region and platform, so TMDB deliberately doesn't expose those links. We only have poster URLs (from Amazon CDN) in the movie dataset.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SCALABILITY
+  ══════════════════════════════════════════════ -->
+  <div class="section" id="tab-scale">
+
+    <div class="section-title">Scalability & Production Readiness</div>
+    <button class="expand-btn" onclick="expandAll('tab-scale')">Expand All</button>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">Q</div>
+        <strong>Global Python state for recommendations — that's a race condition, right?</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <p>Absolutely. The globals <code>movies_recommend_final</code>, <code>songs_recommend_final</code>, <code>books_recommend_final</code> are overwritten on every POST. If User A POSTs, then User B POSTs before User A calls GET, User A gets User B's results. Classic <span class="hl-warn">TOCTOU (time-of-check-time-of-use) race condition</span>.</p>
+        <p>The right fixes, in order of simplicity:</p>
+        <ol>
+          <li><span class="hl-green">Synchronous</span>: Return recommendation results directly in the POST response body — no second GET needed at all.</li>
+          <li><span class="hl">Job ID pattern</span>: POST returns a UUID, client polls <code>GET /result/{uuid}</code>. Results stored per-job, not globally.</li>
+          <li><span class="hl-orange">Task queue</span>: For long-running computation — Celery + Redis. POST enqueues a task, returns job ID. Worker computes and stores result. Client polls.</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">Q</div>
+        <strong>How would you scale this to 10,000 concurrent users?</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <p>The current architecture would fail immediately. Redesign steps:</p>
+        <ol>
+          <li><span class="hl">Stateless API</span>: Remove all globals. POST returns recommendations directly. Enables horizontal scaling.</li>
+          <li><span class="hl-green">Pre-computed embeddings</span>: Store movie/book/song feature vectors in FAISS or Pinecone. Query becomes an ANN search — milliseconds, not seconds.</li>
+          <li><span class="hl-orange">Caching</span>: Cache recommendation results by input fingerprint in Redis (TTL ~1 hour). Same rating pattern → cache hit, no recomputation.</li>
+          <li><span class="hl">Horizontal scaling</span>: Deploy Flask behind gunicorn (4+ workers) + nginx. Or containerize with Docker and scale via Kubernetes.</li>
+          <li><span class="hl-green">Async workers</span>: For heavy computation, use Celery + Redis. POST enqueues, worker computes, client polls.</li>
+          <li><span class="hl">PostgreSQL</span>: Replace CSV reads with indexed DB queries.</li>
+          <li><span class="hl-orange">CDN</span>: Serve poster images from CDN, not Amazon direct URLs.</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">Q</div>
+        <strong>The song recommender is a pure Python O(n) loop. How would you optimize it?</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <p>Three levels of optimization:</p>
+        <p><strong style="color:var(--text)">Level 1 — Numpy vectorization (100x faster, 5 minutes to implement):</strong></p>
+        <pre>distances = np.<span class="fn">sum</span>(np.<span class="fn">abs</span>(all_features - query_features), axis=<span class="num">1</span>)
+indices = np.<span class="fn">argsort</span>(distances)[:<span class="num">21</span>]</pre>
+        <p><strong style="color:var(--text)">Level 2 — sklearn NearestNeighbors (sub-linear with BallTree):</strong></p>
+        <pre>nn = <span class="fn">NearestNeighbors</span>(n_neighbors=<span class="num">21</span>, metric=<span class="string">'manhattan'</span>, algorithm=<span class="string">'ball_tree'</span>)
+nn.<span class="fn">fit</span>(normalized_features)
+distances, indices = nn.<span class="fn">kneighbors</span>([query])</pre>
+        <p><strong style="color:var(--text)">Level 3 — FAISS (production, millions of items, GPU-accelerated):</strong></p>
+        <p>Build an IVF index offline, use approximate nearest neighbor search. Query time O(log n) in practice.</p>
+        <p>Also: normalize features first (z-score per column) to prevent <code>duration_ms</code> dominating the distance.</p>
+      </div>
+    </div>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">Q</div>
+        <strong>What testing exists? What would you add?</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <p><span class="hl-warn">Honest answer</span>: No automated tests. The project used manual integration testing — run the app, rate items, verify results look reasonable.</p>
+        <p>What I'd add for production:</p>
+        <ul>
+          <li><strong style="color:var(--text)">Unit tests (pytest)</strong>: Known input → expected output for all three recommendation functions. Snapshot tests for edge cases (all low ratings, single rating, all same genre).</li>
+          <li><strong style="color:var(--text)">API integration tests</strong>: Flask test client, test all 9 endpoints. Verify 201 on POST, correct data shape on GETs.</li>
+          <li><strong style="color:var(--text)">Frontend component tests</strong>: React Testing Library — slider interactions, submit validation, toast rendering.</li>
+          <li><strong style="color:var(--text)">E2E tests</strong>: Cypress or Playwright — full user journey from rating to results.</li>
+          <li><strong style="color:var(--text)">Offline evaluation</strong>: Hold-out evaluation using MovieLens test split. Precision@K, Recall@K, NDCG for the movie recommender.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">Q</div>
+        <strong>If you rewrote this from scratch today, what would you do differently?</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <ol>
+          <li><span class="hl-green">FastAPI</span> instead of Flask — async, type hints, auto-generated OpenAPI docs, Pydantic validation</li>
+          <li><span class="hl">Return recommendations in the POST response</span> — eliminate global state entirely</li>
+          <li><span class="hl-orange">Feature normalization</span> for songs before distance computation</li>
+          <li><span class="hl">Sentence-transformers</span> for movie embeddings instead of CountVectorizer (richer semantic similarity)</li>
+          <li><span class="hl-green">FAISS or Pinecone</span> for ANN search instead of brute-force loops</li>
+          <li><span class="hl">Docker Compose</span> instead of bash start/stop scripts</li>
+          <li><span class="hl-orange">Negative feedback</span> — use low ratings as signal with explicit weighting</li>
+          <li><span class="hl">Proper REST design</span> — genre filter as GET with query params, not POST</li>
+          <li><span class="hl-green">Delete dead code</span> — remove the unused KMeans block in Song.py</li>
+          <li><span class="hl">Test coverage</span> — unit + integration + E2E from day one</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       DATA & ML
+  ══════════════════════════════════════════════ -->
+  <div class="section" id="tab-data">
+
+    <div class="section-title">Data Sources & ML Details</div>
+    <button class="expand-btn" onclick="expandAll('tab-data')">Expand All</button>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">Q</div>
+        <strong>Where did the datasets come from?</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <ul>
+          <li><span class="hl">Movies</span>: TMDB (The Movie Database) metadata dataset. Correlation matrix derived from MovieLens user ratings data. Filtered to 1,496 movies present in both datasets.</li>
+          <li><span class="hl-green">Songs</span>: Spotify Tracks Dataset (available on Kaggle, originally ~600K tracks). We used a curated subset of 8,010 songs that included audio feature data.</li>
+          <li><span class="hl-orange">Books</span>: Amazon Books dataset — ratings, user data, and book metadata. Filtered to 727 popular books with sufficient rating density; pivot table covers ~29,783 users.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">Q</div>
+        <strong>Why only 1,496 movies? Why not more?</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <p>Two constraints:</p>
+        <p><strong style="color:var(--text)">1. Correlation matrix size:</strong> The matrix grows as O(n²). At 1,496 movies → ~17MB CSV. At 10,000 movies → ~800MB. Running on a student laptop, 1,496 was a practical upper bound.</p>
+        <p><strong style="color:var(--text)">2. Dataset intersection:</strong> Movies needed to exist in <em>both</em> TMDB (for metadata) and MovieLens (for user ratings to build the correlation matrix). The intersection of well-rated, well-known films with both metadata and rating history naturally clustered around ~1,500 entries.</p>
+        <div class="callout callout-blue">
+          <strong>Production Fix</strong>
+          Use sparse matrix representation (only store non-zero correlations). Or switch to an embedding-based approach where correlation computation is replaced by ANN search — scales to millions of items.
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">Q</div>
+        <strong>How did you pre-process the tags column for movies?</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <p>The <code>tags</code> column is a denormalized NLP feature engineered offline in a Jupyter notebook, then saved to <code>movies5_1496.csv</code>. Construction:</p>
+        <ul>
+          <li><strong style="color:var(--text)">genres</strong>: List values joined, lowercased</li>
+          <li><strong style="color:var(--text)">keywords</strong>: List values joined, lowercased</li>
+          <li><strong style="color:var(--text)">overview</strong>: Space-tokenized, lowercased</li>
+          <li><strong style="color:var(--text)">cast</strong>: Names with spaces removed (<code>"Tom Hanks"</code> → <code>"TomHanks"</code>) — prevents "Tom" from matching unrelated entries</li>
+          <li><strong style="color:var(--text)">director</strong>: Same treatment as cast</li>
+          <li><strong style="color:var(--text)">production_companies</strong>: Same treatment</li>
+        </ul>
+        <p>Everything concatenated into one lowercase string. Removing spaces from names ensures the full name is treated as one token by the vectorizer — a deliberate NLP design decision to improve specificity.</p>
+      </div>
+    </div>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">Q</div>
+        <strong>What are the 12 Spotify audio features used for songs?</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <table>
+          <thead><tr><th>Feature</th><th>Range</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td>danceability</td><td>0.0–1.0</td><td>How suitable for dancing</td></tr>
+            <tr><td>energy</td><td>0.0–1.0</td><td>Perceptual intensity and activity</td></tr>
+            <tr><td>acousticness</td><td>0.0–1.0</td><td>Confidence it's acoustic</td></tr>
+            <tr><td>instrumentalness</td><td>0.0–1.0</td><td>Predicts no vocals</td></tr>
+            <tr><td>liveness</td><td>0.0–1.0</td><td>Presence of live audience</td></tr>
+            <tr><td>speechiness</td><td>0.0–1.0</td><td>Presence of spoken words</td></tr>
+            <tr><td>valence</td><td>0.0–1.0</td><td>Musical positiveness/happiness</td></tr>
+            <tr><td>tempo</td><td>~0–250 BPM</td><td>Estimated tempo</td></tr>
+            <tr><td>loudness</td><td>–60–0 dB</td><td>Overall loudness</td></tr>
+            <tr><td>key</td><td>0–11</td><td>Musical key (C=0, C#=1, ...)</td></tr>
+            <tr><td>mode</td><td>0 or 1</td><td>Minor (0) or Major (1)</td></tr>
+            <tr><td>duration_ms</td><td>~30K–600K</td><td>Duration in milliseconds</td></tr>
+          </tbody>
+        </table>
+        <div class="callout callout-warn">
+          <strong>Scale Problem</strong>
+          <code>duration_ms</code> (~200,000) vs <code>valence</code> (0–1) — the distance is dominated by duration. Normalization required for fair comparison.
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">Q</div>
+        <strong>Why random sampling for the initial item display?</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <p>Movies: <code>head(50).sample(16)</code> — top 50 by vote_average, then random 16. Songs: <code>head(100).sample(16)</code>. Books: similar.</p>
+        <p>Without sampling, every user would see the exact same 16 items — always Toy Story, The Dark Knight, etc. Random sampling from the top N ensures variety while keeping quality high. Users are more likely to have seen and be able to rate items from the top tier.</p>
+        <p>This is a simple form of <span class="hl">exploration-exploitation</span> tradeoff: exploit the high-quality items (top 50/100) while exploring which ones to show (random sample).</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       ANTI-PATTERNS
+  ══════════════════════════════════════════════ -->
+  <div class="section" id="tab-antipatterns">
+
+    <div class="section-title">Known Anti-Patterns & Limitations</div>
+    <p style="color:var(--muted); margin-bottom:1.2rem; font-size:0.88rem;">Owning these shows engineering maturity. Know them cold.</p>
+    <button class="expand-btn" onclick="expandAll('tab-antipatterns')">Expand All</button>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">Q</div>
+        <strong>Global state for recommendations — how would you fix it?</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <p>The globals were a shortcut for a single-user demo. The fix is simple: return recommendations directly in the POST response.</p>
+        <pre><span class="comment"># Current (broken):</span>
+movies_recommend_final = compute_recommendations(ratings)
+<span class="keyword">return</span> <span class="fn">jsonify</span>({}), <span class="num">201</span>  <span class="comment"># client must GET separately</span>
+
+<span class="comment"># Fixed:</span>
+results = compute_recommendations(ratings)
+<span class="keyword">return</span> <span class="fn">jsonify</span>(results), <span class="num">200</span>  <span class="comment"># return inline, no global needed</span></pre>
+        <p>This also eliminates the <code>GET /movie_result</code>, <code>GET /book_result</code>, <code>GET /song_result</code> endpoints entirely.</p>
+      </div>
+    </div>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">Q</div>
+        <strong>No feature normalization for songs — how bad is it?</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <p>Significant. <code>duration_ms</code> has values around 200,000. <code>valence</code> has values 0–1. When computing Manhattan distance, the contribution of <code>duration_ms</code> is ~200,000x larger than <code>valence</code>. Essentially, the distance is almost entirely determined by how similar the song durations are.</p>
+        <p>Two songs with identical danceability, energy, and valence but different durations could end up far apart. Two songs with opposite moods but similar durations end up close.</p>
+        <p>The fix is one line of scikit-learn:</p>
+        <pre><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> StandardScaler
+features_scaled = <span class="fn">StandardScaler</span>().<span class="fn">fit_transform</span>(features)</pre>
+      </div>
+    </div>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">Q</div>
+        <strong>Flask re-reads CSV files on every request — no caching?</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <p>Actually, the CSVs are read <em>once at import time</em> into module-level pandas DataFrames in each module (<code>Movie.py</code>, <code>Song.py</code>, <code>Book.py</code>). So they're cached in-process for the lifetime of the Flask server. Each request does not re-read disk — it queries the in-memory DataFrame.</p>
+        <p>What's <em>not</em> cached: the recommendation computation itself. Every POST re-runs the vectorizer, similarity computation, etc. For a single-user system this is fine. For production, cache recommendation results by input signature in Redis.</p>
+      </div>
+    </div>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">Q</div>
+        <strong>POST /filter is not RESTful. What's wrong with it?</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <p>REST convention: GET for reads (idempotent, cacheable, bookmarkable), POST for writes (creates/mutates state).</p>
+        <p>Filtering movies is a read operation — it doesn't create or modify anything. It should be:</p>
+        <pre>GET /movies?genres=Drama,Thriller&amp;limit=16</pre>
+        <p>The current POST /filter approach: mutates a global <code>filtered_movies</code> variable, requires a second GET /filtered request to retrieve results, is not idempotent (calling twice with same params is fine, but the pattern implies mutation), and cannot be bookmarked or shared as a URL.</p>
+        <p>The fix also eliminates the <code>GET /filtered</code> endpoint entirely.</p>
+      </div>
+    </div>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">Q</div>
+        <strong>Dead code in Song.py (addFeaturesColumn / KMeans). Why is it there?</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <p>Vestigial from an earlier implementation. It's defined, imports <code>KMeans</code>, but is never called in the recommendation path. It should have been deleted before submission.</p>
+        <p>In a code review, this would be flagged immediately: dead code adds cognitive overhead, can confuse future maintainers ("is this used somewhere? why is it here?"), and suggests incomplete cleanup.</p>
+        <p>I'd delete it. If the clustering idea is worth preserving as a future optimization, it belongs in a comment or a separate feature branch — not as dead production code.</p>
+      </div>
+    </div>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">Q</div>
+        <strong>What other improvements would make this production-ready?</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <ul>
+          <li><span class="hl-warn">No auth</span>: No user accounts, no session management. All state is shared globally.</li>
+          <li><span class="hl-warn">No input validation</span>: POSTed ratings aren't validated (could send non-numeric ratings, out-of-range values, injection payloads).</li>
+          <li><span class="hl-warn">No error handling</span>: If a rated book title isn't found in the pivot table, the code may fail silently or crash.</li>
+          <li><span class="hl-warn">No logging or observability</span>: No structured logs, no metrics, no tracing.</li>
+          <li><span class="hl-warn">Hardcoded data paths</span>: CSV paths are relative to the Flask working directory — fragile if run from a different directory.</li>
+          <li><span class="hl-warn">No rate limiting</span>: The recommendation endpoints could be hammered.</li>
+          <li><span class="hl-warn">Poster images via Amazon CDN URLs</span>: External dependency — if Amazon changes URLs, all poster images break.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       QUICK REF
+  ══════════════════════════════════════════════ -->
+  <div class="section" id="tab-quickref">
+
+    <div class="section-title">Numbers to Know Cold</div>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-num">1,496</div><div class="stat-label">Movies</div></div>
+      <div class="stat-card"><div class="stat-num">8,010</div><div class="stat-label">Songs</div></div>
+      <div class="stat-card"><div class="stat-num">727</div><div class="stat-label">Books</div></div>
+      <div class="stat-card"><div class="stat-num">~30K</div><div class="stat-label">Book Users</div></div>
+      <div class="stat-card"><div class="stat-num">1,496²</div><div class="stat-label">Correlation Matrix</div></div>
+      <div class="stat-card"><div class="stat-num">12</div><div class="stat-label">Audio Features</div></div>
+      <div class="stat-card"><div class="stat-num">9</div><div class="stat-label">API Endpoints</div></div>
+      <div class="stat-card"><div class="stat-num">12</div><div class="stat-label">Max Recommendations</div></div>
+      <div class="stat-card"><div class="stat-num">16</div><div class="stat-label">Items Shown to Rate</div></div>
+      <div class="stat-card"><div class="stat-num">≥3/5</div><div class="stat-label">Content Seed Threshold</div></div>
+      <div class="stat-card"><div class="stat-num">3000</div><div class="stat-label">Frontend Port</div></div>
+      <div class="stat-card"><div class="stat-num">5000</div><div class="stat-label">Backend Port</div></div>
+    </div>
+
+    <div class="section-title" style="margin-top:2rem">API Endpoint Reference</div>
+    <table>
+      <thead><tr><th>Method</th><th>Endpoint</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td>GET</td><td><code>/movies_votes</code></td><td>Top 50 by vote_average, random sample 16</td></tr>
+        <tr><td>GET</td><td><code>/filtered</code></td><td>Genre-filtered movies (max 16)</td></tr>
+        <tr><td>GET</td><td><code>/movie_result</code></td><td>Stored movie recommendations</td></tr>
+        <tr><td>GET</td><td><code>/songs_popularity</code></td><td>Top 100 by popularity, random sample 16</td></tr>
+        <tr><td>GET</td><td><code>/song_result</code></td><td>Stored song recommendations</td></tr>
+        <tr><td>GET</td><td><code>/books_votes</code></td><td>Top 50 by avg rating, random sample 16</td></tr>
+        <tr><td>GET</td><td><code>/book_result</code></td><td>Stored book recommendations</td></tr>
+        <tr><td>POST</td><td><code>/filter</code></td><td>Filter movies by genres</td></tr>
+        <tr><td>POST</td><td><code>/recommendmovie</code></td><td>Compute movie recommendations</td></tr>
+        <tr><td>POST</td><td><code>/recommendbook</code></td><td>Compute book recommendations</td></tr>
+        <tr><td>POST</td><td><code>/recommendsong</code></td><td>Compute song recommendations</td></tr>
+      </tbody>
+    </table>
+
+    <div class="section-title" style="margin-top:2rem">Tech Stack Summary</div>
+    <table>
+      <thead><tr><th>Layer</th><th>Technology</th><th>Version</th><th>Why</th></tr></thead>
+      <tbody>
+        <tr><td>Frontend</td><td>React</td><td>17.0.2</td><td>SPA, component-based UI</td></tr>
+        <tr><td>Routing</td><td>React Router DOM</td><td>5.3.0</td><td>Client-side routing</td></tr>
+        <tr><td>UI Library</td><td>CoreUI React</td><td>4.1.2</td><td>Cards, modals, sliders, toasts</td></tr>
+        <tr><td>Backend</td><td>Flask</td><td>latest</td><td>Minimal REST API</td></tr>
+        <tr><td>JSONP</td><td>flask_jsonpify</td><td>1.5.0</td><td>Legacy CORS workaround (unnecessary)</td></tr>
+        <tr><td>Data</td><td>pandas</td><td>latest</td><td>DataFrame operations on CSVs</td></tr>
+        <tr><td>ML</td><td>scikit-learn</td><td>latest</td><td>KNN, TF-IDF, CountVectorizer, NearestNeighbors</td></tr>
+        <tr><td>Math</td><td>numpy</td><td>latest</td><td>Numerical operations</td></tr>
+        <tr><td>Sparse</td><td>scipy</td><td>latest</td><td>CSR sparse matrix for books pivot</td></tr>
+        <tr><td>Progress</td><td>tqdm</td><td>latest</td><td>Progress bar for song loop</td></tr>
+      </tbody>
+    </table>
+
+    <div class="section-title" style="margin-top:2rem">Algorithm Cheat Sheet</div>
+    <table>
+      <thead><tr><th>Domain</th><th>Algorithm</th><th>Data Used</th><th>Key Library</th></tr></thead>
+      <tbody>
+        <tr><td>Movies (Collab)</td><td>Pearson Correlation + weighted sum</td><td>Pre-computed 1496×1496 matrix</td><td>pandas</td></tr>
+        <tr><td>Movies (Content)</td><td>CountVectorizer + Cosine Similarity</td><td>tags column (NLP)</td><td>sklearn CountVectorizer</td></tr>
+        <tr><td>Movies (Content)</td><td>TF-IDF + Sigmoid Kernel</td><td>tags column (NLP)</td><td>sklearn TfidfVectorizer</td></tr>
+        <tr><td>Songs</td><td>Manhattan Distance KNN (brute)</td><td>12 Spotify audio features</td><td>Pure Python + tqdm</td></tr>
+        <tr><td>Books</td><td>KNN + Cosine Similarity</td><td>673 books × 29K users pivot</td><td>sklearn NearestNeighbors + scipy</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<footer>
+  MULTIRATER &mdash; BE Final Year Project &mdash; Published in IJRASET (Paper ID: IJRASET42927) &mdash; Staff Engineer Interview Prep
+</footer>
+
+<script>
+  function toggleCard(card) {
+    card.classList.toggle('open');
+  }
+
+  function switchTab(name) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  function expandAll(sectionId) {
+    const section = document.getElementById(sectionId);
+    section.querySelectorAll('.qa-card').forEach(card => card.classList.add('open'));
+  }
+</script>
+</body>
+</html>
