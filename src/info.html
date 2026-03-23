@@ -479,6 +479,7 @@
     <button class="tab-btn" onclick="switchTab('data')">Data & ML</button>
     <button class="tab-btn" onclick="switchTab('antipatterns')">Anti-patterns</button>
     <button class="tab-btn" onclick="switchTab('quickref')">Quick Ref</button>
+    <button class="tab-btn" onclick="switchTab('improvements')">Improvements</button>
   </div>
 
   <!-- ══════════════════════════════════════════════
@@ -1336,6 +1337,276 @@ features_scaled = <span class="fn">StandardScaler</span>().<span class="fn">fit_
         <tr><td>Books</td><td>KNN + Cosine Similarity</td><td>673 books × 29K users pivot</td><td>sklearn NearestNeighbors + scipy</td></tr>
       </tbody>
     </table>
+  </div>
+
+  <div class="section" id="tab-improvements">
+
+    <div class="pitch-box">
+      <p>A deep retrospective on what we'd change if rebuilding from scratch — covering engineering mistakes, algorithm upgrades, and 2024–2025 SOTA approaches across Movies, Songs, and Books.</p>
+    </div>
+
+    <div class="section-title">Critical Engineering Issues (Fix These Before Any Algorithm Change)</div>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">1</div>
+        <strong>Models are re-trained on every single request</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <p>The single highest-impact fix is not an algorithm change — it's an architectural one.</p>
+        <p><span class="hl-warn">Books:</span> <code>Book.runKNN()</code> fits a KNN model on a 674×29,782 sparse matrix <strong>from scratch on every POST to <code>/recommendbook</code></strong>. <span class="hl-warn">Movies:</span> <code>getSimilarity()</code> recomputes a full 1,496×1,496 cosine similarity matrix on every <code>/recommendmovie</code> POST. Every GET endpoint re-reads CSVs from disk.</p>
+        <div class="callout callout-orange">
+          <strong>Fix</strong>
+          Load all datasets and pre-compute all models once at Flask startup as module-level variables. Estimated speedup: 10–50× for book recommendations, 5–10× for movies.
+        </div>
+        <pre><span class="comment"># app.py — run once at startup, not per-request</span>
+MOVIES = Movie.readCSVMoviesBackend()
+CORR   = Movie.readCSVCorr()
+SIM    = Movie.getSimilarity(MOVIES)
+SIG, IDX = Movie.getSigIndices(MOVIES)
+BOOKS  = Book.readCSVBooks()
+PIVOT  = Book.readCSVPivotTable()
+KNN    = Book.runKNN(PIVOT)
+SONGS  = Song.readCSVSongs()</pre>
+      </div>
+    </div>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">2</div>
+        <strong>Song distance is a Python loop — 50–100× slower than it needs to be</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <p><code>recommendOneSong()</code> in <code>Song.py</code> iterates 8,010 rows in pure Python, calling <code>np.absolute()</code> per cell. With 3 rated songs, that's 24,030 interpreted iterations.</p>
+        <div class="callout callout-orange">
+          <strong>Fix — one line replaces the entire inner loop</strong>
+          Replace the <code>tqdm</code> loop with a vectorized numpy operation.
+        </div>
+        <pre>feature_cols = [c for i, c in enumerate(data.columns) if i not in [0,1,2,3,4,5,18]]
+distances = np.sum(np.abs(data[feature_cols].values - song_row[feature_cols].values), axis=1)</pre>
+        <p>Estimated speedup: <span class="hl-green">50–100×</span> with zero algorithm change.</p>
+      </div>
+    </div>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">3</div>
+        <strong>Race condition in global state — two simultaneous users overwrite each other</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <p><code>movies_recommend_final</code>, <code>songs_recommend_final</code>, and <code>books_recommend_final</code> are module-level globals mutated by POST handlers and read by subsequent GET handlers. If two users POST simultaneously, User B's POST overwrites User A's results before User A's GET reads them.</p>
+        <div class="callout callout-blue">
+          <strong>Fix</strong>
+          Return results directly from the POST response body. Eliminate the two-phase POST→GET pattern entirely. This makes the API stateless and safe for concurrent users.
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">4</div>
+        <strong>KMeans in Song.py is computed but never used (dead code)</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <p><code>addFeaturesColumn()</code> fits KMeans with 10 clusters on normalized audio features and adds a <code>features</code> column to the songs DataFrame. However, this column is <strong>never referenced</strong> in <code>recommendOneSong()</code> or <code>recommendSongs()</code>. The clusters were the intended foundation for two-stage retrieval but were never wired in.</p>
+        <div class="callout callout-green">
+          <strong>The intended fix was already planned</strong>
+          Filter candidates to the same cluster before distance computation. Reduces O(8,010) to O(~801) average case — the work was done, just never connected.
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title" style="margin-top:2rem">Algorithm Improvements by Domain</div>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">▲</div>
+        <strong>Movies — Replace Pearson Correlation CF with ALS Matrix Factorization</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <p><span class="hl-warn">Problem with current approach:</span> The Pearson correlation matrix was pre-computed on a static dataset. It cannot incorporate new ratings without a full recompute. Pearson is also sensitive to high variance on small sample sizes (users who rate few items).</p>
+        <p><span class="hl-green">Better: ALS (Alternating Least Squares) Matrix Factorization</span></p>
+        <ul>
+          <li>Factorizes the user-item matrix into k latent factor matrices U (users × k) and V (items × k)</li>
+          <li>Handles sparsity far better than Pearson correlation — movies with few shared raters still get positioned in latent space</li>
+          <li>Supports incremental updates without full recompute</li>
+          <li>For explicit ratings: <code>Surprise</code> library's SVD++ outperforms plain SVD</li>
+          <li>Fits 1,496 movies in under 1 second on CPU with the <code>implicit</code> library</li>
+        </ul>
+        <div class="callout callout-blue">
+          <strong>SOTA 2024–2025</strong>
+          LightGCN (He et al., 2020) — models users/items as a bipartite graph and propagates embeddings via lightweight graph convolution. State of the art on MovieLens benchmarks. Overkill for 1,496 movies but the correct production answer.
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">▲</div>
+        <strong>Movies — Replace CountVectorizer + Sigmoid Kernel with Sentence Transformers</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <p><span class="hl-warn">Problem:</span> Two content methods (CountVectorizer + cosine, TF-IDF + sigmoid kernel) both operate on the same <code>tags</code> field — they are not truly orthogonal. Bag-of-words loses semantic meaning: "Action thriller" and "psychological suspense" have zero word overlap despite being semantically close. The sigmoid kernel over TF-IDF has no principled theoretical advantage for recommendation and can produce non-intuitive negative similarity scores.</p>
+        <p><span class="hl-green">Better: Sentence Transformers (<code>all-MiniLM-L6-v2</code>)</span></p>
+        <ul>
+          <li>Encode the <code>tags</code> field into 384-dimensional dense semantic vectors <strong>once offline</strong></li>
+          <li>"Action thriller with psychological tension" becomes semantically close to "crime drama with mind games" — even with zero word overlap</li>
+          <li>Replaces both content methods with a single, simpler, more accurate approach</li>
+          <li>Pre-computed embeddings stored as <code>.npy</code> file (~4.4 MB for 1,496 movies) — loads in milliseconds at startup</li>
+        </ul>
+        <pre><span class="comment"># One-time offline embedding</span>
+<span class="keyword">from</span> sentence_transformers <span class="keyword">import</span> SentenceTransformer
+model = SentenceTransformer(<span class="string">'all-MiniLM-L6-v2'</span>)
+embeddings = model.encode(movies[<span class="string">'tags'</span>].tolist())
+np.save(<span class="string">'movie_embeddings.npy'</span>, embeddings)</pre>
+      </div>
+    </div>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">▲</div>
+        <strong>Books — Replace Dense Pivot → KNN with TruncatedSVD + FAISS</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <p><span class="hl-warn">Problem:</span> The 674 × 29,782 pivot table is extremely sparse. Two books with zero users in common have cosine distance of 1.0 (maximally dissimilar) — recommendations for rarely-rated books are effectively random. The 76.7 MB dense CSV is loaded per-request and KNN is refitted from scratch each time.</p>
+        <p><span class="hl-green">Better: TruncatedSVD → FAISS</span></p>
+        <ul>
+          <li><code>TruncatedSVD(n_components=50)</code> on the sparse pivot — 50 latent factors capture most variance, positions all books in a shared latent space even with zero shared raters</li>
+          <li>Store the resulting 674×50 item matrix and query with FAISS <code>IndexFlatL2</code></li>
+          <li>Reduces memory: 76.7 MB CSV → ~270 KB float32 matrix</li>
+          <li>Speeds up lookups: microseconds vs. full KNN refit</li>
+          <li>Also partially solves sparsity — the "zero overlap = maximum distance" problem disappears</li>
+        </ul>
+        <div class="callout callout-orange">
+          <strong>Also add a content fallback</strong>
+          Book title + author TF-IDF as a fallback when a book is not in the pivot table. Currently this path crashes with an uncaught exception.
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">▲</div>
+        <strong>Songs — Wire in the KMeans Clusters + Use FAISS</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <p>The KMeans (k=10) was already fitted but never connected to the recommendation logic. The intended two-stage retrieval was: find cluster → distance within cluster only.</p>
+        <p><span class="hl-green">Immediate improvement (uses existing code):</span> Filter candidates to the query song's cluster before distance computation. Reduces O(8,010) to O(~801) average case — roughly 10× faster, same algorithm.</p>
+        <p><span class="hl-green">Better: FAISS <code>IndexFlatL1</code></span></p>
+        <ul>
+          <li>Exact Manhattan distance nearest-neighbor queries in <strong>microseconds</strong> for 8,010 songs in 12 dimensions</li>
+          <li>Drop-in replacement for the manual loop</li>
+          <li>Same results, ~1000× faster</li>
+        </ul>
+        <pre><span class="keyword">import</span> faiss
+index = faiss.IndexFlatL1(<span class="num">12</span>)
+index.add(songs[feature_cols].values.astype(<span class="string">'float32'</span>))
+D, I = index.search(query.astype(<span class="string">'float32'</span>), k=<span class="num">11</span>)  <span class="comment"># top-11, exclude self</span></pre>
+      </div>
+    </div>
+
+    <div class="section-title" style="margin-top:2rem">What I Would Add (Not Just Replace)</div>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">+</div>
+        <strong>Session Persistence — Enable Real Personalization Over Time</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <p>The system is entirely stateless. Ratings are sent as POST body, processed once, and discarded. The same user's preferences cannot accumulate. The system cannot improve for a user after their first session.</p>
+        <div class="callout callout-green">
+          <strong>Fix: SQLite + session tokens</strong>
+          Store user ratings in SQLite keyed by a session token (set as a cookie). On subsequent visits, load previous ratings and append new ones. No algorithm change needed — just feed the accumulated history into the same existing recommendation logic.
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">+</div>
+        <strong>Fix Popularity Bias in Discovery — Surface Long-Tail Items</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <p>All three discovery endpoints use <code>head(50).sample(16)</code> — a movie ranked 51st is permanently invisible. The top-50 cap artificially restricts the candidate pool and creates a feedback loop where popular items get rated more, making them appear even more popular.</p>
+        <div class="callout callout-blue">
+          <strong>Fix: Weighted sampling</strong>
+          Replace <code>head(50).sample(16)</code> with a weighted sample where items outside the top-50 have non-zero probability (e.g., inverse-rank weighting). This surfaces items ranked 51–200 and improves discovery diversity.
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-card" onclick="toggleCard(this)">
+      <div class="qa-question">
+        <div class="q-icon">+</div>
+        <strong>LLM Re-ranking with RAG — The Most Publishable 2024–2025 Addition</strong>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="qa-answer">
+        <p>The current system returns items with no explanations. Users don't know <em>why</em> something was recommended.</p>
+        <p><span class="hl-green">Two-stage architecture with LLM re-ranking:</span></p>
+        <ul>
+          <li><strong>Stage 1 (Retrieve):</strong> Use existing algorithms (or FAISS) to get top-30 candidates fast</li>
+          <li><strong>Stage 2 (Re-rank + Explain):</strong> Send candidates + user ratings to an LLM with a prompt like <em>"Given a user who liked X, Y, Z, rank these 30 candidates and explain why the top 5 fit"</em></li>
+        </ul>
+        <p>Papers: TALLRec (2023), LLaMA4Rec (2024), RecGPT (2024). This is the frontier of recommendation research as of 2024–2025.</p>
+        <div class="callout callout-warn">
+          <strong>Tradeoffs</strong>
+          API cost (~$0.001/request with Claude Haiku or GPT-4o-mini), 1–3s latency, hallucination risk without RAG grounding to your actual dataset.
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title" style="margin-top:2rem">Prioritized Improvement Roadmap</div>
+    <table>
+      <thead><tr><th>Priority</th><th>Change</th><th>Effort</th><th>Impact</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Pre-load all models at Flask startup</td><td>2h</td><td>Eliminates 90% of request latency</td></tr>
+        <tr><td>2</td><td>Vectorize song distance with numpy</td><td>30m</td><td>50–100× speed for songs</td></tr>
+        <tr><td>3</td><td>Return results from POST (fix race condition)</td><td>1h</td><td>Correctness for concurrent users</td></tr>
+        <tr><td>4</td><td>Save/load <code>.npy</code> for similarity matrices</td><td>1h</td><td>Eliminates recomputation on restart</td></tr>
+        <tr><td>5</td><td>SQLite session storage for ratings</td><td>4h</td><td>Enables real personalization</td></tr>
+        <tr><td>6</td><td>TruncatedSVD on book pivot + FAISS</td><td>4h</td><td>Solves book sparsity + speed</td></tr>
+        <tr><td>7</td><td>Sentence Transformers for movie content</td><td>4h</td><td>Semantic similarity vs bag-of-words</td></tr>
+        <tr><td>8</td><td>ALS matrix factorization for movie CF</td><td>8h</td><td>Better than Pearson, handles new ratings</td></tr>
+        <tr><td>9</td><td>Wire in KMeans clusters for songs</td><td>1h</td><td>10× speed using already-computed clusters</td></tr>
+        <tr><td>10</td><td>LLM re-ranking with RAG</td><td>8h</td><td>Explainable recs + most publishable addition</td></tr>
+      </tbody>
+    </table>
+
+    <div class="section-title" style="margin-top:2rem">Ideal v2 Architecture</div>
+    <div class="callout callout-blue">
+      <strong>Two-phase offline + online design</strong>
+      Pre-compute everything expensive offline. Serve only fast lookups at request time.
+    </div>
+    <pre><span class="comment">── Offline pipeline (runs once / on data update) ──────────────────</span>
+→ Sentence transformer embeddings for movies / books / songs tags
+→ ALS or LightGCN training on rating data
+→ TruncatedSVD (k=50) on book pivot matrix
+→ FAISS indices built from all embeddings
+→ Saved as .npy / .faiss files to disk
+
+<span class="comment">── Flask startup (runs once) ───────────────────────────────────────</span>
+→ Load pre-built FAISS indices into memory
+→ Load pre-trained model weights
+→ Ready to serve in &lt;1 second
+
+<span class="comment">── Request time (per user) ─────────────────────────────────────────</span>
+→ Encode query vector (fast inference)
+→ FAISS k-NN lookup (microseconds)
+→ Optional: LLM re-rank top-N candidates
+→ Return results in &lt;100ms</pre>
+    <p style="color:var(--muted); font-size:0.88rem; margin-top:0.8rem">This is the same two-tower architecture used by YouTube, Spotify, and Pinterest at scale — implemented at BE project scale.</p>
+
   </div>
 
 </div>
